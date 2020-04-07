@@ -37,7 +37,7 @@ public class EmployeeSystemTestSuite {
     static final String APPLICATION_CONTEXT_ROOT = "make-progress";
     static final String HTTP_SCHEMA = "http";
     static final String HOST = "localhost";
-    static final int PORT = 8080; //TODO - use your actual Payara port number
+    static final int PORT = 9090; //TODO - use your actual Payara port number
     
     static final String SOME_RESOURCE =
         //some JAX-RS resource the 'admin' user has security privileges to invokd

@@ -9,11 +9,11 @@ servers:
   - url: 'http://localhost:{port}/{contextRoot}/{basePath}'
     variables:
       contextRoot:
-         default: 'rest-employeeSystem'
+         default: 'make-progress'
       basePath:
         default: 'api/v1'
       port:
-        default: '8080'
+        default: '9090'
 
 components:
   securitySchemes:

@@ -28,10 +28,24 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+
 /**
  * Phone class
  * 
  */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "phoneType")
+@JsonSubTypes({
+    @Type(value = HomePhone.class, name = "H"),
+    @Type(value = WorkPhone.class, name = "W"),
+    @Type(value = MobilePhone.class, name = "M")
+})
 @Entity(name = "Phone")
 @Table(name = "PHONE")
 @AttributeOverride(name = "id", column = @Column(name="PHONE_ID"))
@@ -64,6 +78,7 @@ public abstract class PhonePojo extends PojoBase implements Serializable {
         this.phoneNumber = phonenumber;
     }
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "OWNING_EMP_ID")
     public EmployeePojo getOwningEmployee() {
