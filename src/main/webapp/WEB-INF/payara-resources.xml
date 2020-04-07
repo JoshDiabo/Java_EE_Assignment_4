@@ -7,7 +7,7 @@
         name="assignment4DS"> 
        <property name="User" value="sa"/> 
        <property name="Password" value="password"/>
-       <property name="URL" value="jdbc:h2:tcp://localhost:9092/~/assignment4"/>
+       <property name="URL" value="jdbc:h2:tcp://localhost:12345/~/assignment4"/>
     </jdbc-connection-pool>
     <jdbc-resource pool-name="assignment4DS" jndi-name="java:app/jdbc/assignment4" />
  </resources>

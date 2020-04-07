@@ -1,3 +1,10 @@
+/**
+ * Group Members:
+ * Sam Heaton
+ * Michael Norris
+ * Josh Diabo
+ * Daria Ponomareva
+ */
 package com.algonquincollege.cst8277.rest;
 
 import static com.algonquincollege.cst8277.utils.MyConstants.ADMIN_ROLE;

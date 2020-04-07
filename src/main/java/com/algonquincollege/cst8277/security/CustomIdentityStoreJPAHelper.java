@@ -2,6 +2,12 @@
  * File: CustomIdentityStoreJPAHelper.java
  * Course materials (20W) CST 8277
  * @author Mike Norman
+ * 
+ * Group Members:
+ * Sam Heaton
+ * Michael Norris
+ * Josh Diabo
+ * Daria Ponomareva
  *
  */
 package com.algonquincollege.cst8277.security;
@@ -10,6 +16,7 @@ import static com.algonquincollege.cst8277.utils.MyConstants.PU_NAME;
 import static java.util.Collections.emptySet;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.ejb.Singleton;
 import javax.ejb.TransactionAttribute;
@@ -17,6 +24,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
 import javax.persistence.TypedQuery;
 import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 
@@ -48,7 +56,10 @@ public class CustomIdentityStoreJPAHelper {
 
     public Set<String> findRoleNamesForUser(String username) {
         Set<String> rolenames = emptySet();
-        //TODO
+        
+        TypedQuery<SecurityRole> a = em.createQuery("select e from SecurityUser e.roles where e.user = :param2", SecurityRole.class);
+        a.setParameter("param2", username);
+        rolenames = a.getResultList().stream().map( s -> s.getRoleName()).collect(Collectors.toSet());
         return rolenames;
     }
 
