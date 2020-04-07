@@ -17,6 +17,7 @@
 package com.algonquincollege.cst8277.models;
 
 import static com.algonquincollege.cst8277.models.EmployeePojo.ALL_EMPLOYEES_QUERY_NAME;
+import static com.algonquincollege.cst8277.models.EmployeePojo.SINGLE_EMPLOYEE_QUERY_NAME;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -31,6 +32,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 /**
  * The Employee class demonstrates several JPA features:
  * <ul>
@@ -42,15 +45,18 @@ import javax.persistence.Table;
 @Entity(name = "Employee")
 @Table(name = "EMPLOYEE")
 @AttributeOverride(name = "id", column = @Column(name="EMP_ID"))
-@NamedQueries(
-    @NamedQuery(name=ALL_EMPLOYEES_QUERY_NAME, query = "select e from Employee e")
-)
+@NamedQueries({
+    @NamedQuery(name=ALL_EMPLOYEES_QUERY_NAME, query = "select e from Employee e"),
+    @NamedQuery(name=SINGLE_EMPLOYEE_QUERY_NAME, query = "select e from Employee e where e.emp_id = :id")
+})
 public class EmployeePojo extends PojoBase implements Serializable {
     /** explicit set serialVersionUID */
     private static final long serialVersionUID = 1L;
     
     public static final String ALL_EMPLOYEES_QUERY_NAME =
         "allEmployees";
+    public static final String SINGLE_EMPLOYEE_QUERY_NAME =
+        "singleEmployees";
 
     protected String firstName;
     protected String lastName;
@@ -130,6 +136,7 @@ public class EmployeePojo extends PojoBase implements Serializable {
         this.salary = salary;
     }
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "owningEmployee", cascade = CascadeType.ALL, orphanRemoval = true)
     public List<PhonePojo> getPhones() {
         return phones;

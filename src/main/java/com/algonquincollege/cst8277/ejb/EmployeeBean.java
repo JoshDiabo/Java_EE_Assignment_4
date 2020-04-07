@@ -8,6 +8,7 @@
 package com.algonquincollege.cst8277.ejb;
 
 import static com.algonquincollege.cst8277.models.EmployeePojo.ALL_EMPLOYEES_QUERY_NAME;
+import static com.algonquincollege.cst8277.models.EmployeePojo.SINGLE_EMPLOYEE_QUERY_NAME;
 
 import java.util.List;
 
@@ -25,5 +26,9 @@ public class EmployeeBean {
     
     public List<EmployeePojo> findAllEmployees() {
         return em.createNamedQuery(ALL_EMPLOYEES_QUERY_NAME, EmployeePojo.class).getResultList();
+    }
+
+    public Object getEmployeeById(int id) {
+        return em.createNamedQuery(SINGLE_EMPLOYEE_QUERY_NAME, EmployeePojo.class).setParameter("id", id).getSingleResult();
     }
 }
