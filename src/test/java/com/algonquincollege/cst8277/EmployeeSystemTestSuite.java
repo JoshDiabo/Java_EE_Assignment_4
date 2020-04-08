@@ -17,8 +17,10 @@ import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.CoreMatchers.not;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
+import java.io.ObjectInputStream;
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
 import java.util.List;
@@ -26,6 +28,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
@@ -34,15 +37,13 @@ import javax.ws.rs.core.UriBuilder;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.algonquincollege.cst8277.ejb.EmployeeBean;
 import com.algonquincollege.cst8277.models.EmployeePojo;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 public class EmployeeSystemTestSuite {
     private static final Class<?> _thisClaz = MethodHandles.lookup().lookupClass();
@@ -64,12 +65,26 @@ public class EmployeeSystemTestSuite {
 
     // test fixture(s)
     static HttpAuthenticationFeature feature;
+    
+    /**
+     * Moved uri to here and initilize in <em>BeforeClass</em>. Seems unnecessary to keep making it.
+     * -- Josh
+     */
+    static URI uri;
 
 
     @BeforeClass
     public static void oneTimeSetUp() throws Exception {
         logger.debug("oneTimeSetUp");
         feature = HttpAuthenticationFeature.basic("admin", "admin");
+        
+        //Josh Defined
+        uri = UriBuilder
+            .fromUri(APPLICATION_CONTEXT_ROOT + APPLICATION_API_VERSION)
+            .scheme(HTTP_SCHEMA)
+            .host(HOST)
+            .port(PORT)
+            .build();
     }
 
     @AfterClass
@@ -86,7 +101,7 @@ public class EmployeeSystemTestSuite {
     @Test
     public void test00_test_admin() {
         Client client = ClientBuilder.newClient();
-        URI uri = UriBuilder
+        uri = UriBuilder
             .fromUri(APPLICATION_CONTEXT_ROOT + APPLICATION_API_VERSION)
             .scheme(HTTP_SCHEMA)
             .host(HOST)
@@ -102,6 +117,34 @@ public class EmployeeSystemTestSuite {
         assertThat(response.getStatus(), is(200));
     }
     
-    
-  
+    /**
+     * Testing inserting a new employee
+     */
+    @Test
+    public void test01_persist_employee() {
+        Client client = ClientBuilder.newClient();
+        uri = UriBuilder
+            .fromUri(APPLICATION_CONTEXT_ROOT + APPLICATION_API_VERSION)
+            .scheme(HTTP_SCHEMA)
+            .host(HOST)
+            .port(PORT)
+            .build();
+        
+        WebTarget webTarget = client
+            .register(feature)
+            .target(uri)
+            .path(SOME_RESOURCE);
+        
+        EmployeePojo newEmp = new EmployeePojo();
+        newEmp.setFirstName("John-O");
+        newEmp.setLastName("Pono");
+        
+        
+        Response response = webTarget
+            .request(APPLICATION_JSON)
+            .post(Entity.json(newEmp), Response.class);
+       
+        
+        assertEquals(200, response.getStatus());
+    }
 }
