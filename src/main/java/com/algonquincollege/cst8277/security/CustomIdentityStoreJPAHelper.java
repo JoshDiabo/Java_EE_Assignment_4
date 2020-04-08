@@ -56,8 +56,9 @@ public class CustomIdentityStoreJPAHelper {
 
     public Set<String> findRoleNamesForUser(String username) {
         Set<String> rolenames = emptySet();
-        
-        TypedQuery<SecurityRole> a = em.createQuery("select e from SecurityUser e.roles where e.user = :param2", SecurityRole.class);
+        TypedQuery<SecurityRole> a = em.createQuery("select e from SecurityUser e.roles where e.user = :param2",
+            SecurityRole.class);
+      
         a.setParameter("param2", username);
         rolenames = a.getResultList().stream().map( s -> s.getRoleName()).collect(Collectors.toSet());
         return rolenames;
