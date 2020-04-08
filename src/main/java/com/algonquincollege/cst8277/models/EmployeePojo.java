@@ -47,7 +47,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @AttributeOverride(name = "id", column = @Column(name="EMP_ID"))
 @NamedQueries({
     @NamedQuery(name=ALL_EMPLOYEES_QUERY_NAME, query = "select e from Employee e"),
-    @NamedQuery(name=SINGLE_EMPLOYEE_QUERY_NAME, query = "select e from Employee e where e.emp_id = :id")
+    @NamedQuery(name=SINGLE_EMPLOYEE_QUERY_NAME, query = "select e from Employee e where e.id = :id")
 })
 public class EmployeePojo extends PojoBase implements Serializable {
     /** explicit set serialVersionUID */

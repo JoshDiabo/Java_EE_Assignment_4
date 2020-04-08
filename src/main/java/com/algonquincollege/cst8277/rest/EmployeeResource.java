@@ -5,7 +5,8 @@ import static com.algonquincollege.cst8277.utils.MyConstants.EMPLOYEE_RESOURCE_N
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
-import javax.websocket.server.PathParam;
+import javax.ws.rs.PathParam;
+//import javax.websocket.server.PathParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -33,6 +34,7 @@ public class EmployeeResource {
     @RolesAllowed(ADMIN_ROLE)
     @Path("{id}")
     public Response getEmployeeById(@PathParam("id") int id) {
+        System.out.println("Heregils: " + eBean.getEmployeeById(id));
         return Response.ok(eBean.getEmployeeById(id)).build();
     }
 

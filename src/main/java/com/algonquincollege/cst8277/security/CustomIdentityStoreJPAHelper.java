@@ -10,6 +10,7 @@ import static com.algonquincollege.cst8277.utils.MyConstants.PU_NAME;
 import static java.util.Collections.emptySet;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.ejb.Singleton;
 import javax.ejb.TransactionAttribute;
@@ -48,7 +49,10 @@ public class CustomIdentityStoreJPAHelper {
 
     public Set<String> findRoleNamesForUser(String username) {
         Set<String> rolenames = emptySet();
-        //TODO
+        TypedQuery<SecurityRole> a = em.createQuery("select e from SecurityUser e.roles where e.user = :param2",
+            SecurityRole.class);
+        a.setParameter("param2", username);
+        rolenames = a.getResultList().stream().map( s -> s.getRoleName()).collect(Collectors.toSet());
         return rolenames;
     }
 
