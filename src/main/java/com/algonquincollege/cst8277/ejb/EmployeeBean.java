@@ -15,6 +15,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 
 import com.algonquincollege.cst8277.models.EmployeePojo;
 
@@ -30,5 +31,13 @@ public class EmployeeBean {
 
     public Object getEmployeeById(int id) {
         return em.createNamedQuery(SINGLE_EMPLOYEE_QUERY_NAME, EmployeePojo.class).setParameter("id", id).getSingleResult();
+    }
+    
+    /**
+     * Persist an employee
+     * @param emp The Employee to persist
+     */
+    public void persistEmployee(EmployeePojo emp) {
+        em.persist(emp);
     }
 }
