@@ -36,6 +36,7 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -70,6 +71,7 @@ public class EmployeePojo extends PojoBase implements Serializable {
     protected String title;
     protected Double salary;
     protected List<PhonePojo> phones = new ArrayList<>();
+    //protected SecurityUser sUser;
 
     // JPA requires each @Entity class have a default constructor
     public EmployeePojo() {
@@ -154,5 +156,5 @@ public class EmployeePojo extends PojoBase implements Serializable {
         getPhones().add(phone);
         phone.setOwningEmployee(this);
     }
-
+    
 }

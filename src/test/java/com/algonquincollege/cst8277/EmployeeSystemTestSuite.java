@@ -26,6 +26,8 @@ import java.net.URI;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.json.JsonObject;
+import javax.persistence.OptimisticLockException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -33,6 +35,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.junit.AfterClass;
@@ -80,8 +83,10 @@ public class EmployeeSystemTestSuite {
      * -- Josh
      */
     static URI uri;
-    static Client client;
 
+    static Client client;
+    
+    static ObjectMapper map;
 
     @BeforeClass
     public static void oneTimeSetUp() throws Exception {
@@ -95,7 +100,8 @@ public class EmployeeSystemTestSuite {
             .host(HOST)
             .port(PORT)
             .build();
-   
+        map = new ObjectMapper().registerModule(new JavaTimeModule());
+
     }
 
     @Before
@@ -113,20 +119,24 @@ public class EmployeeSystemTestSuite {
         
     }
     
+    @Before
+    public void beforeEach() {
+        client = ClientBuilder.newClient();
+    }
+    
+    
+    
     // TODO - create 40 test-cases that send GET/PUT/POST/DELETE messages
     // to REST'ful endpoints for the EmployeeSystem entities using the JAX-RS
     // ClientBuilder APIs
    
     @Test
     public void test00_test_admin() {
-       
-        
-           
-          WebTarget webTarget = client
-          .register(feature)
-          .target(uri)
-          .path(SOME_RESOURCE);
-         
+        WebTarget webTarget = client
+            .register(feature)
+            .target(uri)
+            .path(SOME_RESOURCE);
+
         Response response = webTarget
             .request(APPLICATION_JSON)
             .get();
@@ -136,9 +146,8 @@ public class EmployeeSystemTestSuite {
     /**
      * Testing inserting a new employee
      */
-    @Test
+    @Ignore
     public void test01_persist_employee() {
-        
         WebTarget webTarget = client
             .register(feature)
             .target(uri)
@@ -314,9 +323,30 @@ public class EmployeeSystemTestSuite {
         
         response = webTarget.request(APPLICATION_JSON).post(Entity.json(e1), Response.class);
         assertEquals(200, response.getStatus());
-        
-        
     }
+  
+   @Test
+    public void test15_update_employee_by_id() {
+        WebTarget webTarget = client
+            .register(feature)
+            .target(uri)
+            .path(SOME_RESOURCE)
+            .path("1");
+      
+          String emp1String = response.readEntity(String.class);
+            EmployeePojo emp1 = new EmployeePojo();
+
+            try {
+                emp1 = map.readValue(emp1String, EmployeePojo.class);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            emp1.setFirstName("Testy");
 
 
+            response = webTarget
+                .request(APPLICATION_JSON)
+                .put(Entity.json(emp1), Response.class);
+    }
 }

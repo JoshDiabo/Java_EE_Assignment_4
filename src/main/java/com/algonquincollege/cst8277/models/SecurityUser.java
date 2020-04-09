@@ -83,8 +83,8 @@ public class SecurityUser implements Serializable, Principal {
         this.roles = roles;
     }
 
-    @OneToOne
-    @JoinColumn(name = "EMP_ID")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "EMP_ID", referencedColumnName = "EMP_ID")
     public EmployeePojo getEmployee() {
         return employee;
     }
