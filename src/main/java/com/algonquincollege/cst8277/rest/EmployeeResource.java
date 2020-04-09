@@ -12,9 +12,9 @@ import static com.algonquincollege.cst8277.utils.MyConstants.EMPLOYEE_RESOURCE_N
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
-import javax.persistence.PersistenceException;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -56,16 +56,16 @@ public class EmployeeResource {
     @RolesAllowed(ADMIN_ROLE)
     @Path("{id}")
     public Response getEmployeeById(@PathParam("id") int id) {
-        return Response.ok((eBean.getEmployeeById(id))).build();
+        return Response.ok(eBean.getEmployeeById(id)).build();
     }
     
     @PUT
     @RolesAllowed(ADMIN_ROLE)
     @Path("{id}")
     public Response updateEmployeeById(@PathParam("id") int id, EmployeePojo emp) {
-        emp.setId(id);
         
         try {
+            System.out.println(emp.getFirstName());
             eBean.updateEmployee(emp);
             return Response.ok(emp).build();
         } catch (Exception e) {
@@ -73,4 +73,31 @@ public class EmployeeResource {
             return Response.status(500).build();
         }
     }
+    
+    @DELETE
+    @RolesAllowed(ADMIN_ROLE)
+    @Path("{id}")
+    public Response deleteEmployeeById(@PathParam("id") int id) {
+        try {
+            eBean.deleteEmployeeById(id);
+            return Response.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(500).build();
+        }
+    }
+    
+    @GET
+    @RolesAllowed(ADMIN_ROLE)
+    @Path("RestartSequence")
+    public Response restartSequence() {
+        try {
+            eBean.restartSequence();
+            return Response.status(200).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(500).build();
+        }
+    }
+    
 }

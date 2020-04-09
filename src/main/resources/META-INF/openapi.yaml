@@ -73,6 +73,7 @@ components:
           description: Salary of the employee
           example: 100.0
         # additional for Address/Phone/Project/EmployeeTasks
+
         
     Address:
       description: (20W) Assignment 4 - EmployeeSystem address
@@ -114,7 +115,7 @@ components:
           type: string
           description: Street name
           example: "Sesame"
-
+          
     EmployeesList:
         description: list of employees
         type: object
@@ -170,6 +171,7 @@ paths:
                 application/json:
                   schema:
                     $ref: '#/components/schemas/Employee'
+
 
   delete:
       summary: Delete an Employee

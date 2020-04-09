@@ -5,7 +5,7 @@ import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="Dali", date="2020-04-06T11:15:25.080-0400")
+@Generated(value="Dali", date="2020-04-09T00:10:20.250-0400")
 @StaticMetamodel(ProjectPojo.class)
 public class ProjectPojo_ extends PojoBase_ {
 	public static volatile SetAttribute<ProjectPojo, EmployeePojo> employees;

@@ -41,6 +41,7 @@ public class RestConfig extends Application {
     public Map<String, Object> getProperties() {
         Map<String, Object> props = new HashMap<>();
         props.put("jersey.config.jsonFeature", "JacksonFeature");
+        
         return props;
     }
 }
