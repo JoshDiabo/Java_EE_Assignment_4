@@ -26,6 +26,7 @@ import java.net.URI;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.persistence.OptimisticLockException;
 import javax.ws.rs.client.Client;
@@ -346,7 +347,6 @@ public class EmployeeSystemTestSuite {
     }
     
     @Test
-    @Ignore
     public void test08_read_addresses() {
         WebTarget webTarget = client
             .register(feature)
@@ -357,19 +357,25 @@ public class EmployeeSystemTestSuite {
             .request(APPLICATION_JSON)
             .get();
         
+        
         String a = response.readEntity(String.class);
-        AddressPojo a1 = new AddressPojo();
+        
+        AddressPojo[] a1 = {};
         try {
-            a1 = map.readValue(a, AddressPojo.class);
+            a1 = map.readValue(a, AddressPojo[].class);
         }
-        catch (JsonProcessingException e2) {
-           
+        catch (Exception e) {
+            e.printStackTrace();
         }
+       
+
+        System.out.println(a1[0].getCity());
         
         response = webTarget.request(APPLICATION_JSON).post(Entity.json(a1), Response.class);
         assertEquals(200, response.getStatus());
     }
   
+    @Ignore
     @Test
     public void test15_update_employee_by_id() {
         WebTarget webTarget = client

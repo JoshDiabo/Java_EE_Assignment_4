@@ -47,6 +47,7 @@ public class AddressResource {
     @GET
     @RolesAllowed(ADMIN_ROLE)
     public Response getAllEmployees() {
+        System.out.println(aBean.findAllAddresses());
         return Response.ok(aBean.findAllAddresses()).build();
     }
     
