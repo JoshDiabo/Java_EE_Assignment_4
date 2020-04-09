@@ -68,6 +68,6 @@ public class ProjectBean {
      * Restarts PROJECT id sequence
      */
     public void restartSequence() {
-        em.createNativeQuery("ALTER TABLE Project ALTER COLUMN PROJ_ID RESTART WITH 3").executeUpdate();
+        em.createNativeQuery("ALTER TABLE Project ALTER COLUMN PROJ_ID RESTART WITH 1").executeUpdate();
     }
 }

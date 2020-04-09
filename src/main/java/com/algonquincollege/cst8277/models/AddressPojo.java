@@ -42,7 +42,6 @@ import static com.algonquincollege.cst8277.models.AddressPojo.SINGLE_ADDRESS_QUE
 /**
  * Simple Address class
  */
-
 //JPA Annotations here
 @Access(AccessType.PROPERTY)
 @Entity(name = "Address")

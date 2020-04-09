@@ -123,12 +123,20 @@ public class EmployeeSystemTestSuite {
             .target(uri)
             .path(EMPLOYEE_RESOURCE)
             .path("RestartSequence");
-
+        
         Response response = webTarget
             .request(APPLICATION_JSON)
             .get();
         
-        
+        webTarget = client
+            .register(feature)
+            .target(uri)
+            .path(ADDRESS_RESOURCE)
+            .path("RestartSequence");
+
+        response = webTarget
+            .request(APPLICATION_JSON)
+            .get();
     }
 
     @Before
@@ -158,7 +166,6 @@ public class EmployeeSystemTestSuite {
     // to REST'ful endpoints for the EmployeeSystem entities using the JAX-RS
     // ClientBuilder APIs
    
-    @Ignore
     @Test
     public void test00_test_admin() {
         WebTarget webTarget = client
@@ -238,8 +245,8 @@ public class EmployeeSystemTestSuite {
             .post(Entity.json(newAddress), Response.class);
         
         assertEquals(200, response.getStatus());
-        
     }
+    
     /**
      * Testing inserts a mobile phone with a new employee
      */
@@ -330,6 +337,9 @@ public class EmployeeSystemTestSuite {
         
     }
   
+   /**
+    * Reading all employees from the api
+    */
     @Test
     public void test07_read_employees()  {
         WebTarget webTarget = client
@@ -341,7 +351,6 @@ public class EmployeeSystemTestSuite {
             .request(APPLICATION_JSON)
             .get();
         
-        System.out.print("hello");
         String ex = response.readEntity(String.class);
     
         EmployeePojo[] e1 = {};
@@ -352,11 +361,13 @@ public class EmployeeSystemTestSuite {
         catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.print(e1);
   
         assertEquals(200, response.getStatus());
     }
     
+    /**
+     * Reading all addresses from the api
+     */
     @Test
     public void test08_read_addresses() {
         WebTarget webTarget = client
@@ -379,14 +390,9 @@ public class EmployeeSystemTestSuite {
             e.printStackTrace();
         }
        
-
-        System.out.println(a1[0].getCity());
-        
-        response = webTarget.request(APPLICATION_JSON).post(Entity.json(a1), Response.class);
         assertEquals(200, response.getStatus());
     }
 
-    @Ignore
     @Test
     public void test15_update_employee_by_id() {
         WebTarget webTarget = client
@@ -402,10 +408,7 @@ public class EmployeeSystemTestSuite {
           
           
             String emp1String = response.readEntity(String.class);
-            System.out.println(emp1String);
             EmployeePojo emp1 = new EmployeePojo();
-            
-            System.out.println(emp1String);
 
             try {
                 emp1 = map.readValue(emp1String, EmployeePojo.class);
@@ -417,17 +420,54 @@ public class EmployeeSystemTestSuite {
             emp1.setFirstName("Bono");
   
 
-            String test = "";
+            String newEmp = "";
             try {
-                test = map.writeValueAsString(emp1);
-                System.out.println(test);
+                newEmp = map.writeValueAsString(emp1);
             } catch (Exception e) {
                 e.getStackTrace();
             }
           
             response = webTarget
                 .request(APPLICATION_JSON)
-                .put(Entity.json(test), Response.class);
+                .put(Entity.json(newEmp), Response.class);
+    }
+    
+    @Test
+    public void test17_update_address_by_id() {
+        WebTarget webTarget = client
+            .register(feature)
+            .target(uri)
+            .path(ADDRESS_RESOURCE)
+            .path("1");
+      
+        
+          Response response = webTarget
+            .request(APPLICATION_JSON)
+            .get();
+            
+              String address1String = response.readEntity(String.class);
+              AddressPojo address1 = new AddressPojo();
+              
+
+              try {
+                  address1 = map.readValue(address1String, AddressPojo.class);
+              } catch (Exception e) {
+                  e.printStackTrace();
+              }
+              
+
+              address1.setCountry("Spain");
+              
+              String newAddress = "";
+              try {
+                  newAddress = map.writeValueAsString(address1);
+              } catch (Exception e) {
+                  e.getStackTrace();
+              }
+            
+              response = webTarget
+                  .request(APPLICATION_JSON)
+                  .put(Entity.json(newAddress), Response.class);
     }
    
     @Test
@@ -441,5 +481,32 @@ public class EmployeeSystemTestSuite {
         Response response = webTarget
             .request(APPLICATION_JSON)
             .delete();
+    }
+    
+    @Test
+    public void test22_delete_address_by_id() {
+        WebTarget webTarget = client
+            .register(feature)
+            .target(uri)
+            .path(ADDRESS_RESOURCE)
+            .path("1");
+        
+        Response response = webTarget
+            .request(APPLICATION_JSON)
+            .delete();
+        
+        webTarget = client
+            .register(feature)
+            .target(uri)
+            .path(ADDRESS_RESOURCE)
+            .path("1");
+        
+        response = webTarget
+            .request(APPLICATION_JSON)
+            .get();
+        
+        String address1String = response.readEntity(String.class);
+        
+        System.out.println(address1String);
     }
 }
