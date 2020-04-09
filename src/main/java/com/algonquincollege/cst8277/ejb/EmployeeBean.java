@@ -27,48 +27,58 @@ import com.algonquincollege.cst8277.models.EmployeePojo;
 
 @Stateless
 public class EmployeeBean {
-
     @PersistenceContext(unitName = "assignment4-PU")
     protected EntityManager em;
-    
+
+    /**
+     * 
+     * @return List<EmployeePojo>
+     */
     public List<EmployeePojo> findAllEmployees() {
         return em.createNamedQuery(ALL_EMPLOYEES_QUERY_NAME, EmployeePojo.class).getResultList();
     }
 
+    /**
+     * 
+     * @param id
+     * @return
+     */
     public EmployeePojo getEmployeeById(int id) {
-        EmployeePojo emp = em.createNamedQuery(SINGLE_EMPLOYEE_QUERY_NAME, EmployeePojo.class).setParameter("id", id).getSingleResult();
-
+        EmployeePojo emp = em.createNamedQuery(SINGLE_EMPLOYEE_QUERY_NAME, EmployeePojo.class)
+            .setParameter("id", id).getSingleResult();
         return emp;
     }
-    
+
     /**
      * Persist an employee
+     * 
      * @param emp The Employee to persist
      */
     public void persistEmployee(EmployeePojo emp) {
         em.persist(emp);
     }
-    
+
     /**
      * Update an employee
+     * 
      * @param emp The Employee with updated fields
      */
     public void updateEmployee(EmployeePojo emp) {
         em.detach(emp);
         em.merge(emp);
     }
-    
+
     /**
      * Delete an employee
+     * 
      * @param id The id of the employee to delete
      */
     public void deleteEmployeeById(int id) {
-        EmployeePojo emp = em.createNamedQuery(SINGLE_EMPLOYEE_QUERY_NAME,
-            EmployeePojo.class).setParameter("id", id).getSingleResult();
-        
+        EmployeePojo emp = em.createNamedQuery(SINGLE_EMPLOYEE_QUERY_NAME, EmployeePojo.class)
+            .setParameter("id", id).getSingleResult();
         em.remove(emp);
     }
-    
+
     /**
      * Restarts EMPLOYEE id sequence
      */

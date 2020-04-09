@@ -13,39 +13,37 @@
  */
 package com.algonquincollege.cst8277.models;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 
 import javax.persistence.Embeddable;
 
-
-
 @Embeddable
-public class EmployeeTask {
+public class EmployeeTask implements Serializable {
 
-    /**
-     * task description
-     */
+    private static final long serialVersionUID = 1L;
     protected String description;
-    /**
-     * task done or not
-     */
-    protected boolean done;
+    protected Boolean done;
+    protected LocalDateTime taskStart;
+    protected LocalDateTime taskEndDate;
 
     /**
-     * constructor
+     * Default constructor
      */
     public EmployeeTask() {
     }
 
     /**
      * 
-     * @return task description
+     * @return
      */
-    @Column(name = "TASK_DESCRIPTION")
+    @Column(name="TASK_DESCRIPTION")
     public String getDescription() {
         return description;
     }
-
+    
     /**
      * 
      * @param description
@@ -53,12 +51,13 @@ public class EmployeeTask {
     public void setDescription(String description) {
         this.description = description;
     }
-
+    
     /**
      * 
-     * @return done or not
+     * @return
      */
-    public boolean isDone() {
+    @Column(name="TASK_DONE")
+    public Boolean isDone() {
         return done;
     }
 
@@ -66,8 +65,41 @@ public class EmployeeTask {
      * 
      * @param done
      */
-    public void setDone(boolean done) {
+    public void setDone(Boolean done) {
         this.done = done;
     }
 
+    /**
+     * 
+     * @return
+     */
+    @Column(name="TASK_START")
+    public LocalDateTime getTaskStart() {
+        return taskStart;
+    }
+
+    /**
+     * 
+     * @param taskStart
+     */
+    public void setTaskStart(LocalDateTime taskStart) {
+        this.taskStart = taskStart;
+    }
+
+    /**
+     * 
+     * @return
+     */
+    @Column(name="TASK_END_DATE")
+    public LocalDateTime getTaskEndDate() {
+        return taskEndDate;
+    }
+
+    /**
+     * 
+     * @param taskDone
+     */
+    public void setTaskEndDate(LocalDateTime taskDone) {
+        this.taskEndDate = taskDone;
+    }
 }

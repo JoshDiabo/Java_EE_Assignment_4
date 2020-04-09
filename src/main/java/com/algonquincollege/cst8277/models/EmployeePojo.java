@@ -33,7 +33,9 @@ import java.util.Set;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -79,12 +81,14 @@ public class EmployeePojo extends PojoBase implements Serializable {
     protected Double salary;
     protected List<PhonePojo> phones = new ArrayList<>();
     protected Set<ProjectPojo> projects = new HashSet<>();
+    protected List<EmployeeTask> tasks = new ArrayList<>();
     protected SecurityUser sUser;
 
     // JPA requires each @Entity class have a default constructor
     public EmployeePojo() {
         super();
     }
+    
     /**
      * @return the value for firstName
      */
@@ -92,6 +96,7 @@ public class EmployeePojo extends PojoBase implements Serializable {
     public String getFirstName() {
         return firstName;
     }
+    
     /**
      * @param firstName new value for firstName
      */
@@ -106,6 +111,7 @@ public class EmployeePojo extends PojoBase implements Serializable {
     public String getLastName() {
         return lastName;
     }
+    
     /**
      * @param lastName new value for lastName
      */
@@ -119,11 +125,8 @@ public class EmployeePojo extends PojoBase implements Serializable {
      */
     public void addProject(ProjectPojo ep) {
         getProjects().add(ep);
-        
-        
     }
     
-
     /**
      * 
      * @return projects
@@ -141,12 +144,14 @@ public class EmployeePojo extends PojoBase implements Serializable {
     public void setProjects(Set<ProjectPojo> projects) {
         this.projects = projects;
     }
+    
     /**
      * @return the value for email
      */
     public String getEmail() {
         return email;
     }
+    
     /**
      * @param email new value for email
      */
@@ -173,6 +178,7 @@ public class EmployeePojo extends PojoBase implements Serializable {
     public Double getSalary() {
         return salary;
     }
+    
     /**
      * @param salary new value for salary
      */
@@ -180,17 +186,56 @@ public class EmployeePojo extends PojoBase implements Serializable {
         this.salary = salary;
     }
 
+    /**
+     * 
+     * @return
+     */
     @JsonManagedReference
     @OneToMany(mappedBy = "owningEmployee", cascade = CascadeType.ALL, orphanRemoval = true)
     public List<PhonePojo> getPhones() {
         return phones;
     }
+    
+    /**
+     * 
+     * @param phones
+     */
     public void setPhones(List<PhonePojo> phones) {
         this.phones = phones;
     }
+    
+    /**
+     * 
+     * @param phone
+     */
     public void addPhone(PhonePojo phone) {
         getPhones().add(phone);
         phone.setOwningEmployee(this);
     }
     
+    /**
+     * 
+     * @return
+     */
+    @ElementCollection
+    @CollectionTable(name="EMPLOYEE_TASKS", joinColumns = @JoinColumn(name="OWNING_EMP_ID"))
+    public List<EmployeeTask> getTasks() {
+        return tasks;
+    }
+    
+    /**
+     * 
+     * @param tasks
+     */
+    public void setTasks(List<EmployeeTask> tasks) {
+        this.tasks = tasks;
+    }
+    
+    /**
+     * 
+     * @param employeeTask
+     */
+    public void addTask(EmployeeTask employeeTask) {
+        getTasks().add(employeeTask);
+    }
 }
