@@ -10,6 +10,7 @@ package com.algonquincollege.cst8277.models;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import javax.json.bind.annotation.JsonbDateFormat;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
@@ -19,6 +20,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 /**
  * Abstract class that is base of (class) hierarchy for all c.a.cst8277.models @Entity classes
@@ -51,14 +57,17 @@ public abstract class PojoBase implements Serializable {
         this.version = version;
     }
 
+    @JsonbDateFormat(value = "yyyy-MM-dd")
     @Column(name = "CREATED_DATE")
     public LocalDateTime getCreatedDate() {
         return created;
     }
+   
     public void setCreatedDate(LocalDateTime created) {
         this.created = created;
     }
 
+    @JsonbDateFormat(value = "yyyy-MM-dd")
     @Column(name = "UPDATED_DATE")
     public LocalDateTime getUpdatedDate() {
         return updated;
