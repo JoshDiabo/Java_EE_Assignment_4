@@ -27,19 +27,21 @@ public List<Project> getProjects({@literal @}PathParam("<b><u>emailId</u></b>") 
  * @author mwnorman
  */
 public interface MyConstants {
-
-    // constants on Interfaces are 'public static final' by default,
-    // but I leave 'em in case I move a constant to a Class
-
-    //REST constants
+    
+    // Shared REST constants
     public static final String SLASH = "/";
     public static final String APPLICATION_API_VERSION = SLASH + "api" + SLASH + "v1";
-    public static final String EMPLOYEE_RESOURCE_PATH_ID_ELEMENT =  "id";
-    public static final String EMPLOYEE_RESOURCE_PATH_ID_PATH =  "/{" + EMPLOYEE_RESOURCE_PATH_ID_ELEMENT + "}";
+    public static final String RESOURCE_PATH_ID_ELEMENT =  "id";
+    public static final String RESOURCE_PATH_ID_PATH =  "/{" + RESOURCE_PATH_ID_ELEMENT + "}";
+    
+    /** Endpoint associated with Employee entities */
     public static final String EMPLOYEE_RESOURCE_NAME =  "employees";
     
-    /**Endpoint associated with Address entities*/
+    /** Endpoint associated with Address entities */
     public static final String ADDRESS_RESOURCE_NAME = "addresses";
+    
+    /** Endpoint associated with Project entities */
+    public static final String PROJECT_RESOURCE_NAME = "projects";
 
     //Security constants
     public static final String USER_ROLE = "USER_ROLE";

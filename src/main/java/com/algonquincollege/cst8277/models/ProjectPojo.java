@@ -14,11 +14,17 @@
  *
  * Original @authors dclarke, mbraeuer
  * 
+ * Group Members:
+ * Sam Heaton
+ * Michael Norris
+ * Josh Diabo
  * Daria Ponomareva
- * Student ID: 040648913
  *
  */
 package com.algonquincollege.cst8277.models;
+
+import static com.algonquincollege.cst8277.models.ProjectPojo.ALL_PROJECTS_QUERY_NAME;
+import static com.algonquincollege.cst8277.models.ProjectPojo.SINGLE_PROJECT_QUERY_NAME;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -29,17 +35,28 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 
 import javax.persistence.ManyToMany;
-
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity(name = "Project")
 @Table(name = "PROJECT")
- 
 @AttributeOverride(name = "id", column = @Column(name="PROJ_ID"))
+@NamedQueries({
+    @NamedQuery(name=ALL_PROJECTS_QUERY_NAME, query = "select e from Project e"),
+    @NamedQuery(name=SINGLE_PROJECT_QUERY_NAME, query = "select e from Project e where e.id = :id")
+})
 public class ProjectPojo extends PojoBase implements Serializable {
     /** explicit set serialVersionUID */
     private static final long serialVersionUID = 1L;
 
+    public static final String ALL_PROJECTS_QUERY_NAME =
+        "allProjects";
+    public static final String SINGLE_PROJECT_QUERY_NAME =
+        "singleProject";
+    public static final String RESET_SEQUENCE =
+        "resetProjectSequence";
+    
     /**
      * project description
      */

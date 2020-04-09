@@ -1,38 +1,31 @@
-/**
- * Group Members:
- * Sam Heaton
- * Michael Norris
- * Josh Diabo
- * Daria Ponomareva
- */
 package com.algonquincollege.cst8277.rest;
 
 import static com.algonquincollege.cst8277.utils.MyConstants.ADMIN_ROLE;
-import static com.algonquincollege.cst8277.utils.MyConstants.EMPLOYEE_RESOURCE_NAME;
+import static com.algonquincollege.cst8277.utils.MyConstants.PROJECT_RESOURCE_NAME;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.algonquincollege.cst8277.ejb.EmployeeBean;
-import com.algonquincollege.cst8277.models.EmployeePojo;
+import com.algonquincollege.cst8277.ejb.ProjectBean;
+import com.algonquincollege.cst8277.models.ProjectPojo;
 
-@Path(EMPLOYEE_RESOURCE_NAME)
+@Path(PROJECT_RESOURCE_NAME)
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class EmployeeResource {
+public class ProjectResource {
     
     @EJB
-    protected EmployeeBean eBean;
+    protected ProjectBean pBean;
     
     /**
      * 
@@ -40,8 +33,8 @@ public class EmployeeResource {
      */
     @GET
     @RolesAllowed(ADMIN_ROLE)
-    public Response getAllEmployees() {
-        return Response.ok(eBean.findAllEmployees()).build();
+    public Response getAllProjects() {
+        return Response.ok(pBean.findAllProjects()).build();
     }
     
     /**
@@ -51,10 +44,10 @@ public class EmployeeResource {
      */
     @POST
     @RolesAllowed(ADMIN_ROLE)
-    public Response createNewEmployee(EmployeePojo emp) {
+    public Response createNewEmployee(ProjectPojo proj) {
         try {
-            eBean.persistEmployee(emp);
-            return Response.ok(emp).build();
+            pBean.persistProject(proj);
+            return Response.ok(proj).build();
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(500).build();
@@ -69,8 +62,8 @@ public class EmployeeResource {
     @GET
     @RolesAllowed(ADMIN_ROLE)
     @Path("{id}")
-    public Response getEmployeeById(@PathParam("id") int id) {
-        return Response.ok(eBean.getEmployeeById(id)).build();
+    public Response getProjectById(@PathParam("id") int id) {
+        return Response.ok(pBean.getProjectById(id)).build();
     }
     
     /**
@@ -82,11 +75,9 @@ public class EmployeeResource {
     @PUT
     @RolesAllowed(ADMIN_ROLE)
     @Path("{id}")
-    public Response updateEmployeeById(@PathParam("id") int id, EmployeePojo emp) {
-        
+    public Response updateProjectById(@PathParam("id") int id, ProjectPojo emp) {
         try {
-            System.out.println(emp.getFirstName());
-            eBean.updateEmployee(emp);
+            pBean.updateProject(emp);
             return Response.ok(emp).build();
         } catch (Exception e) {
             e.printStackTrace();
@@ -102,9 +93,9 @@ public class EmployeeResource {
     @DELETE
     @RolesAllowed(ADMIN_ROLE)
     @Path("{id}")
-    public Response deleteEmployeeById(@PathParam("id") int id) {
+    public Response deleteProjectById(@PathParam("id") int id) {
         try {
-            eBean.deleteEmployeeById(id);
+            pBean.deleteProjectById(id);
             return Response.ok().build();
         } catch (Exception e) {
             e.printStackTrace();
@@ -121,7 +112,7 @@ public class EmployeeResource {
     @Path("RestartSequence")
     public Response restartSequence() {
         try {
-            eBean.restartSequence();
+            pBean.restartSequence();
             return Response.status(200).build();
         } catch (Exception e) {
             e.printStackTrace();

@@ -14,8 +14,11 @@
  *
  * Original @authors dclarke, mbraeuer
  * 
+ * Group Members:
+ * Sam Heaton
+ * Michael Norris
+ * Josh Diabo
  * Daria Ponomareva
- * Student ID: 040648913
  */
 package com.algonquincollege.cst8277.models;
 
@@ -39,7 +42,6 @@ import static com.algonquincollege.cst8277.models.AddressPojo.SINGLE_ADDRESS_QUE
 /**
  * Simple Address class
  */
-
 //JPA Annotations here
 @Access(AccessType.PROPERTY)
 @Entity(name = "Address")
