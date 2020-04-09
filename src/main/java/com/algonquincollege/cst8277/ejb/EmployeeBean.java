@@ -22,7 +22,6 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
 
 import com.algonquincollege.cst8277.models.EmployeePojo;
 
@@ -38,7 +37,7 @@ public class EmployeeBean {
 
     public EmployeePojo getEmployeeById(int id) {
         EmployeePojo emp = em.createNamedQuery(SINGLE_EMPLOYEE_QUERY_NAME, EmployeePojo.class).setParameter("id", id).getSingleResult();
-        //em.detach(emp);
+
         return emp;
     }
     
@@ -70,6 +69,9 @@ public class EmployeeBean {
         em.remove(emp);
     }
     
+    /**
+     * Restarts EMPLOYEE id sequence
+     */
     public void restartSequence() {
         em.createNativeQuery("ALTER TABLE Employee ALTER COLUMN EMP_ID RESTART WITH 3").executeUpdate();
     }

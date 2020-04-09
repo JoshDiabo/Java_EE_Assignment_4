@@ -19,6 +19,8 @@
  */
 package com.algonquincollege.cst8277.models;
 
+
+
 import java.io.Serializable;
 
 
@@ -27,7 +29,12 @@ import javax.persistence.AccessType;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+
+import static com.algonquincollege.cst8277.models.AddressPojo.ALL_ADDRESSES_QUERY_NAME;
+import static com.algonquincollege.cst8277.models.AddressPojo.SINGLE_ADDRESS_QUERY_NAME;
 
 /**
  * Simple Address class
@@ -37,11 +44,29 @@ import javax.persistence.Table;
 @Access(AccessType.PROPERTY)
 @Entity(name = "Address")
 @Table(name = "ADDRESS")
-
 @AttributeOverride(name = "id", column = @Column(name="ADDR_ID"))
+@NamedQueries({
+    @NamedQuery(
+        name = ALL_ADDRESSES_QUERY_NAME,
+        query = "SELECT a FROM Address a"
+    ),
+    @NamedQuery(
+        name = SINGLE_ADDRESS_QUERY_NAME,
+        query = "SELECT a FROM Address a" +
+            " WHERE a.id = :id"
+    )
+})
 public class AddressPojo extends PojoBase implements Serializable {
     /** explicit set serialVersionUID */
     private static final long serialVersionUID = 1L;
+    
+    /**Query name constant*/
+    public static final String ALL_ADDRESSES_QUERY_NAME =
+        "allAddress";
+    
+    /**Query name constant*/
+    public static final String SINGLE_ADDRESS_QUERY_NAME =
+        "singleAddress";
     
     /**
      * Employees city
@@ -65,7 +90,6 @@ public class AddressPojo extends PojoBase implements Serializable {
     protected String street;
 
     
-
     /**
      * JPA requires each @Entity class have a default constructor
      */
