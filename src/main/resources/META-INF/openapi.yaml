@@ -20,7 +20,7 @@ components:
     basicAuth:
       type: http
       scheme: basic
-  
+
   responses:
     UnauthorizedAdminError:
       description: request requires HTTP authentication for ADMIN_ROLE
@@ -28,9 +28,8 @@ components:
       description: request requires HTTP authentication for USER_ROLE
     NotFound:
       description: The specified resource was not found
-  
+
   schemas:
-  
     Employee:
       description: (20W) Assignment 4 - EmployeeSystem employee
       type: object
@@ -74,7 +73,6 @@ components:
           example: 100.0
         # additional for Address/Phone/Project/EmployeeTasks
 
-        
     Address:
       description: (20W) Assignment 4 - EmployeeSystem address
       type: object
@@ -115,7 +113,7 @@ components:
           type: string
           description: Street name
           example: "Sesame"
-          
+
     Project:
       description: (20W) Assignment 4 - EmployeeSystem project
       type: object
@@ -144,61 +142,7 @@ components:
           type: string
           description: Project name
           example: 'HR - ProjOne'
-    Phone:
-      description: (20W) Assignment 4 - EmployeeSystem phones
-      type: object
-      required:
-        - id
-      properties:
-        id:
-          description: ID of  entity
-          type: integer
-        version:
-          description: version (OptLock) of entity
-          type: integer
-        createdDate:
-          description: creation timestamp of entity
-          type: string
-          format: date-time
-        updatedDate:
-          description: last-update timestamp of entity
-          type: string
-          format: date-time
-        phoneType:
-          type: string
-          description: Type of phone - W, H, M
-          example: 'W'
-        areaCode:
-          type: integer
-          description: Area Code for phone
-          example: 613
-        phoneNumber:
-          type: integer
-          description: Phone number belonging to phone
-          example: 914-9021
-        mapCoords:
-          type: string
-          description: Map coordinates for home
-          example: "44.564811457735° N   133.058411636261° W"
-        department:
-          type: string
-          description: Department
-          example: "HR"
-        provider:
-          type: string
-          description: Phone provider
-          example: "Rogers"
-    
-    PhoneList:
-        description: list of phones
-        type: object
-        properties:
-          phones:
-           type: array
-           items:
-            $ref: '#/components/schemas/Phone'
 
-    
     ProjectList:
         description: list of projects
         type: object
@@ -208,7 +152,6 @@ components:
            items:
             $ref: '#/components/schemas/Project'
 
-          
     EmployeesList:
         description: list of employees
         type: object
@@ -217,7 +160,7 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Employee'
-    
+
     AddressList:
         description: list of addresses
         type: object
@@ -229,93 +172,40 @@ components:
 
 security:
   - basicAuth: []
-  
+
 paths:
- /employees:
-  get:
-    responses:
-      401:
-         $ref: '#/components/responses/UnauthorizedAdminError'
-      200:
-        description: OK
-        content:
-          application/json:
-           schema:
-             $ref: '#/components/schemas/EmployeesList'
-  post:
-        summary: Create an Employee
-
-        parameters:
-        - in: path
-          name: employee
-          required: true
-          description: Employee to Create
-          schema:
-            
-            $ref: '#/components/schemas/Employee'
-        
-          
-        responses:
-            401:
-               $ref: '#/components/responses/UnauthorizedAdminError'
-            200:
-               description: OK
-               content:
-                application/json:
-                  schema:
-                    $ref: '#/components/schemas/Employee'
-
-
-  delete:
-      summary: Delete an Employee
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-          description: numeric id of the employee to delete
+  /employees:
+    get:
+      summary: Gets all employees
       responses:
-          200:
-           description: OK
-           content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Employee'
-          401:
-            $ref: '#/components/responses/UnauthorizedUserError'
-          404:
-            $ref: '#/components/responses/NotFound'
-  put:
-      summary: Update an Employee
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-          description: numeric id of the employee to delete
-          
-        - in: path
-          name: employee
-          description: Employee to Create
-          required: true
-          schema:
-            
-            $ref: '#/components/schemas/Employee'
-      responses:
+        401:
+          $ref: '#/components/responses/UnauthorizedAdminError'
         200:
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Employee'
+                $ref: '#/components/schemas/EmployeesList'
+    post:
+      summary: Create an Employee
+      parameters:
+        - in: path
+          name: employee
+          required: true
+          description: Employee to Create
+          schema:
+            $ref: '#/components/schemas/Employee'
+      responses:
         401:
-          $ref: '#/components/responses/UnauthorizedUserError'
-        404:
-          $ref: '#/components/responses/NotFound'
-          
- /employees/{id}:
+          $ref: '#/components/responses/UnauthorizedAdminError'
+          200:
+            description: OK
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Employee'
+
+  /employees/{id}:
     get:
       summary: Retrieves an employee by its id
       parameters:
@@ -325,7 +215,6 @@ paths:
             type: integer
           required: true
           description: numeric id of the employee to retrieve
-
       responses:
         200:
           description: OK
@@ -337,91 +226,86 @@ paths:
           $ref: '#/components/responses/UnauthorizedUserError'
         404:
           $ref: '#/components/responses/NotFound'
-          
- /addresses:
-  get:
-    responses:
-      401:
-         $ref: '#/components/responses/UnauthorizedAdminError'
-      200:
-        description: OK
-        content:
-          application/json:
-           schema:
-             $ref: '#/components/schemas/AddressList'
-
-  post:
-        summary: Create an Adress
-
-        parameters:
-        - in: path
-          name: address
-          required: true
-          description: Address to Create
-          schema:
-            
-            $ref: '#/components/schemas/Address'
-        
-          
-        responses:
-            401:
-               $ref: '#/components/responses/UnauthorizedAdminError'
-            200:
-               description: OK
-               content:
-                application/json:
-                  schema:
-                    $ref: '#/components/schemas/Address'
-                    
-  delete:
-      summary: Delete an Address
+    delete:
+      summary: Delete an Employee
       parameters:
         - in: path
           name: id
           schema:
             type: integer
           required: true
-          description: numeric id of the address to delete
-      responses:
-          200:
-           description: OK
-           content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Address'
-          401:
-            $ref: '#/components/responses/UnauthorizedUserError'
-          404:
-            $ref: '#/components/responses/NotFound'
-  put:
-      summary: Update an Address
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-          description: numeric id of the address to delete
-          
-        - in: path
-          name: address
-          description: Address to Create
-          required: true
-          schema:
-            
-            $ref: '#/components/schemas/Address'
+          description: numeric id of the employee to delete
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Address'
+                $ref: '#/components/schemas/Employee'
         401:
           $ref: '#/components/responses/UnauthorizedUserError'
         404:
           $ref: '#/components/responses/NotFound'
- /addresses/{id}:
+    put:
+      summary: Update an Employee
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: numeric id of the employee to delete
+
+        - in: path
+          name: employee
+          description: Employee to Create
+          required: true
+          schema:
+            $ref: '#/components/schemas/Employee'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        401:
+          $ref: '#/components/responses/UnauthorizedUserError'
+        404:
+          $ref: '#/components/responses/NotFound'
+
+  /addresses:
+    get:
+      summary: Gets all addresses
+      responses:
+        401:
+          $ref: '#/components/responses/UnauthorizedAdminError'
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddressList'
+    post:
+      summary: Create an Adress
+      parameters:
+        - in: path
+          name: address
+          required: true
+          description: Address to Create
+          schema:
+            $ref: '#/components/schemas/Address'
+      responses:
+        401:
+          $ref: '#/components/responses/UnauthorizedAdminError'
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+
+  /addresses/{id}:
     get:
       summary: Retrieves an address by its id
       parameters:
@@ -431,7 +315,6 @@ paths:
             type: integer
           required: true
           description: numeric id of the address to retrieve
-
       responses:
         200:
           description: OK
@@ -443,43 +326,106 @@ paths:
           $ref: '#/components/responses/UnauthorizedUserError'
         404:
           $ref: '#/components/responses/NotFound'
-          
- /projects:
-  get:
-    responses:
-      401:
-         $ref: '#/components/responses/UnauthorizedAdminError'
-      200:
-        description: OK
-        content:
-          application/json:
-           schema:
-             $ref: '#/components/schemas/ProjectList'
+    delete:
+      summary: Delete an Address
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: numeric id of the address to delete
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+        401:
+          $ref: '#/components/responses/UnauthorizedUserError'
+        404:
+          $ref: '#/components/responses/NotFound'
+    put:
+      summary: Update an Address
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: numeric id of the address to delete
+        - in: path
+          name: address
+          description: Address to Create
+          required: true
+          schema:
+            $ref: '#/components/schemas/Address'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+        401:
+          $ref: '#/components/responses/UnauthorizedUserError'
+        404:
+          $ref: '#/components/responses/NotFound'
 
-  post:
-        summary: Create a Project
-
-        parameters:
+  /projects:
+    get:
+      summary: Get all projects
+      responses:
+        401:
+          $ref: '#/components/responses/UnauthorizedAdminError'
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectList'
+    post:
+      summary: Create a Project
+      parameters:
         - in: path
           name: projects
           required: true
           description: Project to Create
           schema:
-            
             $ref: '#/components/schemas/Project'
-        
-          
-        responses:
-            401:
-               $ref: '#/components/responses/UnauthorizedAdminError'
-            200:
-               description: OK
-               content:
-                application/json:
-                  schema:
-                    $ref: '#/components/schemas/Project'
-                    
-  delete:
+      responses:
+        401:
+          $ref: '#/components/responses/UnauthorizedAdminError'
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+
+  /projects/{id}:
+    get:
+      summary: Retrieves a project by its id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: numeric id of the project to retrieve
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        401:
+          $ref: '#/components/responses/UnauthorizedUserError'
+        404:
+          $ref: '#/components/responses/NotFound'
+    delete:
       summary: Delete a Project
       parameters:
         - in: path
@@ -499,7 +445,7 @@ paths:
             $ref: '#/components/responses/UnauthorizedUserError'
           404:
             $ref: '#/components/responses/NotFound'
-  put:
+    put:
       summary: Update a Project
       parameters:
         - in: path
@@ -508,13 +454,11 @@ paths:
             type: integer
           required: true
           description: numeric id of the project to delete
-          
         - in: path
           name: projects
           description: Project to Create
           required: true
           schema:
-            
             $ref: '#/components/schemas/Project'
       responses:
         200:
@@ -527,139 +471,3 @@ paths:
           $ref: '#/components/responses/UnauthorizedUserError'
         404:
           $ref: '#/components/responses/NotFound'
-
- /projects/{id}:
-    get:
-      summary: Retrieves a project by its id
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-          description: numeric id of the project to retrieve
-
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Project'
-        401:
-          $ref: '#/components/responses/UnauthorizedUserError'
-        404:
-          $ref: '#/components/responses/NotFound'
-          
- /phones:
-  get:
-    responses:
-      401:
-         $ref: '#/components/responses/UnauthorizedAdminError'
-      200:
-        description: OK
-        content:
-          application/json:
-           schema:
-             $ref: '#/components/schemas/PhoneList'
-
-  post:
-        summary: Create a Phone
-
-        parameters:
-        - in: path
-          name: phones
-          required: true
-          description: Phone to Create
-          schema:
-            
-            $ref: '#/components/schemas/Phone'
-        
-          
-        responses:
-            401:
-               $ref: '#/components/responses/UnauthorizedAdminError'
-            200:
-               description: OK
-               content:
-                application/json:
-                  schema:
-                    $ref: '#/components/schemas/Phone'
-                    
-  delete:
-      summary: Delete a Phone
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-          description: numeric id of the phone to delete
-      responses:
-          200:
-           description: OK
-           content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Phone'
-          401:
-            $ref: '#/components/responses/UnauthorizedUserError'
-          404:
-            $ref: '#/components/responses/NotFound'
-  put:
-      summary: Update a Phone
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-          description: numeric id of the phone to delete
-          
-        - in: path
-          name: phones
-          description: Phone to Create
-          required: true
-          schema:
-            
-            $ref: '#/components/schemas/Phone'
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Phone'
-        401:
-          $ref: '#/components/responses/UnauthorizedUserError'
-        404:
-          $ref: '#/components/responses/NotFound'
-
- /phones/{id}:
-    get:
-      summary: Retrieves a phone by its id
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-          description: numeric id of the phone to retrieve
-
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Phone'
-        401:
-          $ref: '#/components/responses/UnauthorizedUserError'
-        404:
-          $ref: '#/components/responses/NotFound'
-
-  
- 
- 
-    
-
