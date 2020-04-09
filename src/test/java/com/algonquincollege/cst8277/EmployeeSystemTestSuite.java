@@ -63,37 +63,93 @@ import com.algonquincollege.cst8277.models.MobilePhone;
 import com.algonquincollege.cst8277.models.PhonePojo;
 import com.algonquincollege.cst8277.models.ProjectPojo;
 import com.algonquincollege.cst8277.models.WorkPhone;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * Unit tests to test API GET, PUT, POST, DELETE
+ * for the EmployeeSystem
+ */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class EmployeeSystemTestSuite {
+    
+    /**
+     * Handles class lookups
+     */
     private static final Class<?> _thisClaz = MethodHandles.lookup().lookupClass();
+    
+    /**
+     * Logging API
+     */
     private static final Logger logger = LoggerFactory.getLogger(_thisClaz);
 
+    /**
+     * Defines root of the api URL
+     */
     static final String APPLICATION_CONTEXT_ROOT = "make-progress";
-    static final String HTTP_SCHEMA = "http";
-    static final String HOST = "localhost";
-    static final int PORT = 8080; //TODO - use your actual Payara port number
     
+    /**
+     * Defines the HTTP type
+     */
+    static final String HTTP_SCHEMA = "http";
+    
+    /**
+     * The server hosting the API
+     */
+    static final String HOST = "localhost";
+
+ 
+
+    
+    /**
+     * Port hosting the API
+     */
+    static final int PORT = 9090; //TODO - use your actual Payara port number
+
+    
+    /**
+     * Defines ADMIN_USER user name
+     */
     static final String DEFAULT_ADMIN_USER = "admin";
+    
+    /**
+     * Defines ADMIN_USER password
+     */
     static final String DEFAULT_ADMIN_USER_PW = "admin";
+    
+    /**
+     * Defines DEFAULT_USER user name
+     */
     static final String DEFAULT_USER = "user1";
+    
+    /**
+     * Defines DEFAULT_USER password
+     */
     static final String DEFAULT_USER_PW = "user1";
     
+    /**
+     * Employee resource endpoint
+     */
     static final String EMPLOYEE_RESOURCE =
         //some JAX-RS resource the 'admin' user has security privileges to invokd
         "employees";
     
+    /**
+     * Address resource endpoint
+     */
     static final String ADDRESS_RESOURCE =
         "addresses";
     
+
+    /**
+     * Project resource endpoint
+     */
+
     static final String PROJECT_RESOURCE =
         "projects";
 
-    // test fixture(s)
+    /**
+     * Defines authentication parameters
+     */
     static HttpAuthenticationFeature feature;
     
     /**
@@ -102,10 +158,20 @@ public class EmployeeSystemTestSuite {
      */
     static URI uri;
 
+    /**
+     * Defines the client
+     */
     static Client client;
     
+    /**
+     * Jackson API for handling JSON
+     */
     static ObjectMapper map;
 
+    /**
+     * Executes before all tests
+     * @throws Exception
+     */
     @BeforeClass
     public static void oneTimeSetUp() throws Exception {
         logger.debug("oneTimeSetUp");
@@ -140,16 +206,21 @@ public class EmployeeSystemTestSuite {
         response = webTarget
             .request(APPLICATION_JSON)
             .get();
-    }
-
-    @Before
-    public void beforeTests() {
         
-    
-     client = ClientBuilder.newClient();
-    
+        webTarget = client
+            .register(feature)
+            .target(uri)
+            .path(PROJECT_RESOURCE)
+            .path("RestartSequence");
+
+        response = webTarget
+            .request(APPLICATION_JSON)
+            .get();
     }
-    
+  
+    /**
+     * Executes after all tests
+     */
     @AfterClass
     public static void oneTimeTearDown() {
         
@@ -158,6 +229,9 @@ public class EmployeeSystemTestSuite {
         
     }
     
+    /**
+     * Executes before each test
+     */
     @Before
     public void beforeEach() {
         client = ClientBuilder.newClient();
@@ -169,6 +243,9 @@ public class EmployeeSystemTestSuite {
     // to REST'ful endpoints for the EmployeeSystem entities using the JAX-RS
     // ClientBuilder APIs
    
+    /**
+     * Tests admin credentials against api
+     */
     @Test
     public void test00_test_admin() {
         WebTarget webTarget = client
@@ -208,7 +285,6 @@ public class EmployeeSystemTestSuite {
     /**
      * Testing inserting a new project
      */
-    
     @Test
     public void test02_persist_project() {
         WebTarget webTarget = client
@@ -225,7 +301,6 @@ public class EmployeeSystemTestSuite {
             .post(Entity.json(newProj), Response.class);
         
         assertEquals(200, response.getStatus());
-        
     }
 
     /**
@@ -369,10 +444,38 @@ public class EmployeeSystemTestSuite {
     }
     
     /**
+     * Read all projects from the api
+     */
+    @Test
+    public void test08_read_projects() {
+        WebTarget webTarget = client
+            .register(feature)
+            .target(uri)
+            .path(PROJECT_RESOURCE);
+        
+        Response response = webTarget
+            .request(APPLICATION_JSON)
+            .get();
+        
+        
+        String p = response.readEntity(String.class);
+        
+        ProjectPojo[] p1 = {};
+        try {
+            p1 = map.readValue(p, ProjectPojo[].class);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+       
+        assertEquals(200, response.getStatus());
+    }
+    
+    /**
      * Reading all addresses from the api
      */
     @Test
-    public void test08_read_addresses() {
+    public void test09_read_addresses() {
         WebTarget webTarget = client
             .register(feature)
             .target(uri)
@@ -403,38 +506,85 @@ public class EmployeeSystemTestSuite {
             .target(uri)
             .path(EMPLOYEE_RESOURCE)
             .path("3");
-      
-        
-          Response response = webTarget
+
+
+        Response response = webTarget
             .request(APPLICATION_JSON)
             .get();
-          
-          
-            String emp1String = response.readEntity(String.class);
-            EmployeePojo emp1 = new EmployeePojo();
 
-            try {
-                emp1 = map.readValue(emp1String, EmployeePojo.class);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            
 
-            emp1.setFirstName("Bono");
-  
+        String emp1String = response.readEntity(String.class);
+        EmployeePojo emp1 = new EmployeePojo();
 
-            String newEmp = "";
-            try {
-                newEmp = map.writeValueAsString(emp1);
-            } catch (Exception e) {
-                e.getStackTrace();
-            }
-          
-            response = webTarget
-                .request(APPLICATION_JSON)
-                .put(Entity.json(newEmp), Response.class);
+        try {
+            emp1 = map.readValue(emp1String, EmployeePojo.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        emp1.setFirstName("Bono");
+
+
+        String newEmp = "";
+        try {
+            newEmp = map.writeValueAsString(emp1);
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+
+        response = webTarget
+            .request(APPLICATION_JSON)
+            .put(Entity.json(newEmp), Response.class);
+        
+        assertEquals(200, response.getStatus());
     }
     
+    /**
+     * Updates a Project with the specified id
+     */
+    @Test
+    public void test16_update_project_by_id() {
+        WebTarget webTarget = client
+            .register(feature)
+            .target(uri)
+            .path(PROJECT_RESOURCE)
+            .path("1");
+      
+        
+         Response response = webTarget
+           .request(APPLICATION_JSON)
+           .get();
+            
+         String project1String = response.readEntity(String.class);
+         ProjectPojo project1 = new ProjectPojo();
+              
+
+         try {
+             project1 = map.readValue(project1String, ProjectPojo.class);
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
+
+         project1.setName("Firs Updated Project");
+
+         String newProject = "";
+         try {
+             newProject = map.writeValueAsString(project1);
+         } catch (Exception e) {
+             e.getStackTrace();
+         }
+
+         response = webTarget
+             .request(APPLICATION_JSON)
+             .put(Entity.json(newProject), Response.class);
+
+         assertEquals(200, response.getStatus());
+    }
+    
+    /**
+     * Updates address with the specified id
+     */
     @Test
     public void test17_update_address_by_id() {
         WebTarget webTarget = client
@@ -444,35 +594,40 @@ public class EmployeeSystemTestSuite {
             .path("1");
       
         
-          Response response = webTarget
-            .request(APPLICATION_JSON)
-            .get();
+         Response response = webTarget
+           .request(APPLICATION_JSON)
+           .get();
             
-              String address1String = response.readEntity(String.class);
-              AddressPojo address1 = new AddressPojo();
+         String address1String = response.readEntity(String.class);
+         AddressPojo address1 = new AddressPojo();
               
 
-              try {
-                  address1 = map.readValue(address1String, AddressPojo.class);
-              } catch (Exception e) {
-                  e.printStackTrace();
-              }
-              
+         try {
+             address1 = map.readValue(address1String, AddressPojo.class);
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
 
-              address1.setCountry("Spain");
-              
-              String newAddress = "";
-              try {
-                  newAddress = map.writeValueAsString(address1);
-              } catch (Exception e) {
-                  e.getStackTrace();
-              }
-            
-              response = webTarget
-                  .request(APPLICATION_JSON)
-                  .put(Entity.json(newAddress), Response.class);
+
+         address1.setCountry("Spain");
+
+         String newAddress = "";
+         try {
+             newAddress = map.writeValueAsString(address1);
+         } catch (Exception e) {
+             e.getStackTrace();
+         }
+
+         response = webTarget
+             .request(APPLICATION_JSON)
+             .put(Entity.json(newAddress), Response.class);
+
+         assertEquals(200, response.getStatus());
     }
    
+    /**
+     * Deletes employee with the specified id
+     */
     @Test
     public void test19_delete_employee_by_id() {
         WebTarget webTarget = client
@@ -484,8 +639,31 @@ public class EmployeeSystemTestSuite {
         Response response = webTarget
             .request(APPLICATION_JSON)
             .delete();
+        
+        assertEquals(200, response.getStatus());
     }
     
+    /**
+     * Deletes project with the specified id
+     */
+    @Test
+    public void test20_delete_project_by_id() {
+        WebTarget webTarget = client
+            .register(feature)
+            .target(uri)
+            .path(PROJECT_RESOURCE)
+            .path("1");
+        
+        Response response = webTarget
+            .request(APPLICATION_JSON)
+            .delete();
+        
+        assertEquals(200, response.getStatus());
+    }
+    
+    /**
+     * Deletes address with the specified id
+     */
     @Test
     public void test22_delete_address_by_id() {
         WebTarget webTarget = client
@@ -498,18 +676,7 @@ public class EmployeeSystemTestSuite {
             .request(APPLICATION_JSON)
             .delete();
         
-        webTarget = client
-            .register(feature)
-            .target(uri)
-            .path(ADDRESS_RESOURCE)
-            .path("1");
         
-        response = webTarget
-            .request(APPLICATION_JSON)
-            .get();
-        
-        String address1String = response.readEntity(String.class);
-        
-        System.out.println(address1String);
+        assertEquals(200, response.getStatus());
     }
 }

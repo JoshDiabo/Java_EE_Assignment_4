@@ -71,7 +71,28 @@ components:
           format: double
           description: Salary of the employee
           example: 100.0
-        # additional for Address/Phone/Project/EmployeeTasks
+        tasks:
+          type: array
+          items:
+            type: object
+            properties:
+              owningEmpId:
+                description: id of owning employee
+                type: integer
+              description:
+                description: description of task
+                type: string
+              done:
+                description: is the task done or not
+                type: boolean
+              taskStart:
+                description: task start time
+                type: string
+                format: date-time
+              taskEndDate:
+                description: task end time
+                type: string
+                format: date-time
 
     Address:
       description: (20W) Assignment 4 - EmployeeSystem address
