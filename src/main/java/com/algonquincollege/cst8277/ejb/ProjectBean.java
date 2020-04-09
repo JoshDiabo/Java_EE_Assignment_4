@@ -5,11 +5,13 @@ import static com.algonquincollege.cst8277.models.ProjectPojo.ALL_PROJECTS_QUERY
 
 import java.util.List;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.algonquincollege.cst8277.models.ProjectPojo;
 
+@Stateless
 public class ProjectBean {
     
     @PersistenceContext(unitName = "assignment4-PU")

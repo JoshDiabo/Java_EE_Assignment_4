@@ -5,7 +5,7 @@
  *
  * @date 2020 03
  *
- * TODO - add to this class for Assignment 4
+ * 
  * Group Members:
  * Sam Heaton
  * Michael Norris
@@ -76,7 +76,7 @@ public class EmployeeSystemTestSuite {
     static final String APPLICATION_CONTEXT_ROOT = "make-progress";
     static final String HTTP_SCHEMA = "http";
     static final String HOST = "localhost";
-    static final int PORT = 9090; //TODO - use your actual Payara port number
+    static final int PORT = 8080; //TODO - use your actual Payara port number
     
     static final String DEFAULT_ADMIN_USER = "admin";
     static final String DEFAULT_ADMIN_USER_PW = "admin";
@@ -89,6 +89,9 @@ public class EmployeeSystemTestSuite {
     
     static final String ADDRESS_RESOURCE =
         "addresses";
+    
+    static final String PROJECT_RESOURCE =
+        "projects";
 
     // test fixture(s)
     static HttpAuthenticationFeature feature;
@@ -205,13 +208,13 @@ public class EmployeeSystemTestSuite {
     /**
      * Testing inserting a new project
      */
-    @Ignore
+    
     @Test
     public void test02_persist_project() {
         WebTarget webTarget = client
             .register(feature)
             .target(uri)
-            .path(EMPLOYEE_RESOURCE);
+            .path(PROJECT_RESOURCE);
         
         ProjectPojo newProj = new ProjectPojo();
         newProj.setName("First Project");
