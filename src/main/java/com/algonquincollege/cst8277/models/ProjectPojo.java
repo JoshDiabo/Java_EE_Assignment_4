@@ -51,11 +51,11 @@ public class ProjectPojo extends PojoBase implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public static final String ALL_PROJECTS_QUERY_NAME =
-        "allEmployees";
+        "allProjects";
     public static final String SINGLE_PROJECT_QUERY_NAME =
-        "singleEmployees";
+        "singleProject";
     public static final String RESET_SEQUENCE =
-        "resetSequence";
+        "resetProjectSequence";
     
     /**
      * project description

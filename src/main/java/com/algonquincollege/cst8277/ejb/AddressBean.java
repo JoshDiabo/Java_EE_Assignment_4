@@ -83,6 +83,6 @@ public class AddressBean {
      * Restarts ADDRESS id sequence
      */
     public void restartSequence() {
-        em.createNativeQuery("ALTER TABLE Address ALTER COLUMN EMP_ID RESTART WITH 1").executeUpdate();
+        em.createNativeQuery("ALTER TABLE Address ALTER COLUMN ADDR_ID RESTART WITH 1").executeUpdate();
     }
 }

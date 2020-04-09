@@ -73,6 +73,47 @@ components:
           description: Salary of the employee
           example: 100.0
         # additional for Address/Phone/Project/EmployeeTasks
+        
+    Address:
+      description: (20W) Assignment 4 - EmployeeSystem address
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          description: ID of  entity
+          type: integer
+        version:
+          description: version (OptLock) of entity
+          type: integer
+        createdDate:
+          description: creation timestamp of entity
+          type: string
+          format: date-time
+        updatedDate:
+          description: last-update timestamp of entity
+          type: string
+          format: date-time
+        city:
+          type: string
+          description: City name
+          example: 'Ottawa'
+        country:
+          type: string
+          description: Country name
+          example: 'Canada'
+        postal:
+          type: string
+          description: Postal Code
+          example: 'K2G 7Z2'
+        state:
+          type: string
+          description: State
+          example: 'ON.'
+        street:
+          type: string
+          description: Street name
+          example: "Sesame"
 
         
     Address:
@@ -264,7 +305,10 @@ paths:
                 application/json:
                   schema:
                     $ref: '#/components/schemas/Employee'
+<<<<<<< HEAD
+=======
 
+>>>>>>> refs/remotes/origin/master
 
   delete:
       summary: Delete an Employee
@@ -421,6 +465,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedUserError'
         404:
           $ref: '#/components/responses/NotFound'
+<<<<<<< HEAD
+=======
  /addresses/{id}:
     get:
       summary: Retrieves an address by its id
@@ -663,3 +709,4 @@ paths:
  
     
 
+>>>>>>> refs/remotes/origin/master

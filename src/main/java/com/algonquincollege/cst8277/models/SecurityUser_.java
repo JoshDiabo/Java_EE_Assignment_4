@@ -1,10 +1,3 @@
-/**
- * Group Members:
- * Sam Heaton
- * Michael Norris
- * Josh Diabo
- * Daria Ponomareva
- */
 package com.algonquincollege.cst8277.models;
 
 import javax.annotation.Generated;
@@ -12,7 +5,7 @@ import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="Dali", date="2020-04-09T13:59:24.166-0400")
+@Generated(value="Dali", date="2020-04-09T16:23:13.665-0400")
 @StaticMetamodel(SecurityUser.class)
 public class SecurityUser_ {
 	public static volatile SingularAttribute<SecurityUser, Integer> id;

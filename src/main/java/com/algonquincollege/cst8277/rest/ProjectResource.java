@@ -93,7 +93,7 @@ public class ProjectResource {
     @DELETE
     @RolesAllowed(ADMIN_ROLE)
     @Path("{id}")
-    public Response deleteEmployeeById(@PathParam("id") int id) {
+    public Response deleteProjectById(@PathParam("id") int id) {
         try {
             pBean.deleteProjectById(id);
             return Response.ok().build();

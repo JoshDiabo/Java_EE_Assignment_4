@@ -72,7 +72,7 @@ public class EmployeePojo extends PojoBase implements Serializable {
     public static final String SINGLE_EMPLOYEE_QUERY_NAME =
         "singleEmployees";
     public static final String RESET_SEQUENCE =
-        "resetSequence";
+        "resetEmployeeSequence";
 
     protected String firstName;
     protected String lastName;
@@ -82,7 +82,6 @@ public class EmployeePojo extends PojoBase implements Serializable {
     protected List<PhonePojo> phones = new ArrayList<>();
     protected Set<ProjectPojo> projects = new HashSet<>();
     protected List<EmployeeTask> tasks = new ArrayList<>();
-    protected SecurityUser sUser;
 
     // JPA requires each @Entity class have a default constructor
     public EmployeePojo() {
@@ -136,15 +135,6 @@ public class EmployeePojo extends PojoBase implements Serializable {
     public Set<ProjectPojo> getProjects() {
         return projects;
     }
-    @OneToOne
-    @JoinColumn(name="USER_ID")
-    public SecurityUser getsUser() {
-       return sUser;
-   }
-   
-   public void setsUser(SecurityUser sUser) {
-       this.sUser = sUser;
-   }
 
     /**
      * 
@@ -246,31 +236,5 @@ public class EmployeePojo extends PojoBase implements Serializable {
     public void addPhone(PhonePojo phone) {
         getPhones().add(phone);
         phone.setOwningEmployee(this);
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    @ElementCollection
-    @CollectionTable(name="EMPLOYEE_TASKS", joinColumns = @JoinColumn(name="OWNING_EMP_ID"))
-    public List<EmployeeTask> getTasks() {
-        return tasks;
-    }
-    
-    /**
-     * 
-     * @param tasks
-     */
-    public void setTasks(List<EmployeeTask> tasks) {
-        this.tasks = tasks;
-    }
-    
-    /**
-     * 
-     * @param employeeTask
-     */
-    public void addTask(EmployeeTask employeeTask) {
-        getTasks().add(employeeTask);
     }
 }
