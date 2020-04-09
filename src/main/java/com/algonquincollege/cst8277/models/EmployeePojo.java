@@ -136,7 +136,16 @@ public class EmployeePojo extends PojoBase implements Serializable {
     public Set<ProjectPojo> getProjects() {
         return projects;
     }
-    
+    @OneToOne
+    @JoinColumn(name="USER_ID")
+    public SecurityUser getsUser() {
+       return sUser;
+   }
+   
+   public void setsUser(SecurityUser sUser) {
+       this.sUser = sUser;
+   }
+
     /**
      * 
      * @param projects
@@ -185,6 +194,32 @@ public class EmployeePojo extends PojoBase implements Serializable {
     public void setSalary(Double salary) {
         this.salary = salary;
     }
+    /**
+     * 
+     * @return tasks
+     */
+    @ElementCollection
+    @CollectionTable(name = "EMPLOYEE_TASKS", joinColumns = @JoinColumn(name = "OWNING_EMP_ID"))
+    public List<EmployeeTask> getTasks() {
+        return tasks;
+    }
+    
+    /**
+     * 
+     * @param tasks
+     */
+    public void setTasks(List<EmployeeTask> tasks) {
+        this.tasks = tasks;
+    }
+    /**
+     * 
+     * @param t
+     */
+    public void addTask(EmployeeTask t) {
+        getTasks().add(t);
+        
+    }
+    
 
     /**
      * 

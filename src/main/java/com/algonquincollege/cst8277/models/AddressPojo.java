@@ -14,8 +14,11 @@
  *
  * Original @authors dclarke, mbraeuer
  * 
+ * Group Members:
+ * Sam Heaton
+ * Michael Norris
+ * Josh Diabo
  * Daria Ponomareva
- * Student ID: 040648913
  */
 package com.algonquincollege.cst8277.models;
 

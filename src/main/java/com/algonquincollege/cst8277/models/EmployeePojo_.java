@@ -6,7 +6,7 @@ import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="Dali", date="2020-04-09T10:39:31.773-0400")
+@Generated(value="Dali", date="2020-04-09T15:20:28.860-0400")
 @StaticMetamodel(EmployeePojo.class)
 public class EmployeePojo_ extends PojoBase_ {
 	public static volatile SingularAttribute<EmployeePojo, String> firstName;
@@ -16,4 +16,6 @@ public class EmployeePojo_ extends PojoBase_ {
 	public static volatile SingularAttribute<EmployeePojo, String> email;
 	public static volatile SingularAttribute<EmployeePojo, String> title;
 	public static volatile SingularAttribute<EmployeePojo, Double> salary;
+	public static volatile ListAttribute<EmployeePojo, EmployeeTask> tasks;
+	public static volatile SingularAttribute<EmployeePojo, SecurityUser> sUser;
 }
