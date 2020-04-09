@@ -333,7 +333,13 @@ public class EmployeeSystemTestSuite {
             .path(SOME_RESOURCE)
             .path("1");
       
-          String emp1String = response.readEntity(String.class);
+        
+          Response response = webTarget
+            .request(APPLICATION_JSON)
+            .get();
+          
+          
+            String emp1String = response.readEntity(String.class);
             EmployeePojo emp1 = new EmployeePojo();
 
             try {

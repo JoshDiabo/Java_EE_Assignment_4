@@ -27,13 +27,18 @@ import static com.algonquincollege.cst8277.models.EmployeePojo.SINGLE_EMPLOYEE_Q
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -71,7 +76,8 @@ public class EmployeePojo extends PojoBase implements Serializable {
     protected String title;
     protected Double salary;
     protected List<PhonePojo> phones = new ArrayList<>();
-    //protected SecurityUser sUser;
+    protected Set<ProjectPojo> projects = new HashSet<>();
+    protected SecurityUser sUser;
 
     // JPA requires each @Entity class have a default constructor
     public EmployeePojo() {
@@ -105,6 +111,34 @@ public class EmployeePojo extends PojoBase implements Serializable {
         this.lastName = lastName;
     }
 
+    /**
+     * 
+     * @param ep
+     */
+    public void addProject(ProjectPojo ep) {
+        getProjects().add(ep);
+        
+        
+    }
+    
+
+    /**
+     * 
+     * @return projects
+     */
+    @ManyToMany
+    @JoinTable(name = "EMP_PROJ", joinColumns = @JoinColumn(name = "EMP_ID", referencedColumnName = "EMP_ID"), inverseJoinColumns = @JoinColumn(name = "PROJ_ID", referencedColumnName = "PROJ_ID"))
+    public Set<ProjectPojo> getProjects() {
+        return projects;
+    }
+    
+    /**
+     * 
+     * @param projects
+     */
+    public void setProjects(Set<ProjectPojo> projects) {
+        this.projects = projects;
+    }
     /**
      * @return the value for email
      */

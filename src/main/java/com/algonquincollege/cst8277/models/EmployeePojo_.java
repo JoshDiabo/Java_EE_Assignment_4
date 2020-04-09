@@ -2,14 +2,16 @@ package com.algonquincollege.cst8277.models;
 
 import javax.annotation.Generated;
 import javax.persistence.metamodel.ListAttribute;
+import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="Dali", date="2020-04-08T19:12:55.477-0400")
+@Generated(value="Dali", date="2020-04-08T23:36:21.222-0400")
 @StaticMetamodel(EmployeePojo.class)
 public class EmployeePojo_ extends PojoBase_ {
 	public static volatile SingularAttribute<EmployeePojo, String> firstName;
 	public static volatile SingularAttribute<EmployeePojo, String> lastName;
+	public static volatile SetAttribute<EmployeePojo, ProjectPojo> projects;
 	public static volatile ListAttribute<EmployeePojo, PhonePojo> phones;
 	public static volatile SingularAttribute<EmployeePojo, String> email;
 	public static volatile SingularAttribute<EmployeePojo, String> title;
