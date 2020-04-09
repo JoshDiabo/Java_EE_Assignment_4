@@ -2,6 +2,13 @@
  * File: MyAuthenticationMechanism.java
  * Course materials (20W) CST 8277
  * @author Mike Norman
+ * 
+ * Group Members:
+ * Sam Heaton
+ * Michael Norris
+ * Josh Diabo
+ * Daria Ponomareva
+ * 
  *
  */
 package com.algonquincollege.cst8277.security;
