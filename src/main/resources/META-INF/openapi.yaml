@@ -13,7 +13,7 @@ servers:
       basePath:
         default: 'api/v1'
       port:
-        default: '8080'
+        default: '9090'
 
 components:
   securitySchemes:
@@ -75,7 +75,7 @@ components:
         # additional for Address/Phone/Project/EmployeeTasks      
 
     EmployeesList:
-        description: list of employees
+        description: list of employeess
         type: object
         properties:
           employees:
@@ -98,6 +98,29 @@ paths:
             application/json:
              schema: 
                $ref: '#/components/schemas/EmployeesList'
+    post:
+        summary: Create an Employee
+        consumes:
+          -application/json
+        parameters: 
+        - in: body
+          name: employee
+          description: Employee to Create
+          schema: 
+            type: object,
+            $ref: '#/components/schemas/Employee'
+        
+          
+        responses:
+            401:
+               $ref: '#/components/responses/UnauthorizedAdminError'
+            200:
+               description: OK
+               content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Employee'
+            
   /employees/{id}:
     get:
       summary: Retrieves an employee by its id
@@ -108,6 +131,32 @@ paths:
             type: integer
           required: true
           description: numeric id of the employee to retrieve
+          
+    delete:
+      summary: Delete an Employee
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: numeric id of the employee to delete
+    put:
+      summary: Update an Employee
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: numeric id of the employee to delete
+          
+        - in: body
+          name: employee
+          description: Employee to Create
+          schema: 
+            type: object,
+            $ref: '#/components/schemas/Employee'
       responses:
         200:
           description: OK

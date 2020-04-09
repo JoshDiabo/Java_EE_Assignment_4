@@ -38,7 +38,7 @@ public class EmployeeBean {
 
     public EmployeePojo getEmployeeById(int id) {
         EmployeePojo emp = em.createNamedQuery(SINGLE_EMPLOYEE_QUERY_NAME, EmployeePojo.class).setParameter("id", id).getSingleResult();
-        em.detach(emp);
+        //em.detach(emp);
         return emp;
     }
     
@@ -57,5 +57,20 @@ public class EmployeeBean {
     public void updateEmployee(EmployeePojo emp) {
         em.detach(emp);
         em.merge(emp);
+    }
+    
+    /**
+     * Delete an employee
+     * @param id The id of the employee to delete
+     */
+    public void deleteEmployeeById(int id) {
+        EmployeePojo emp = em.createNamedQuery(SINGLE_EMPLOYEE_QUERY_NAME,
+            EmployeePojo.class).setParameter("id", id).getSingleResult();
+        
+        em.remove(emp);
+    }
+    
+    public void restartSequence() {
+        em.createNativeQuery("ALTER TABLE Employee ALTER COLUMN EMP_ID RESTART WITH 3").executeUpdate();
     }
 }
