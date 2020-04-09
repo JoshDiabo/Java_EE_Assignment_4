@@ -74,6 +74,48 @@ components:
           example: 100.0
         # additional for Address/Phone/Project/EmployeeTasks
 
+        
+    Address:
+      description: (20W) Assignment 4 - EmployeeSystem address
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          description: ID of  entity
+          type: integer
+        version:
+          description: version (OptLock) of entity
+          type: integer
+        createdDate:
+          description: creation timestamp of entity
+          type: string
+          format: date-time
+        updatedDate:
+          description: last-update timestamp of entity
+          type: string
+          format: date-time
+        city:
+          type: string
+          description: City name
+          example: 'Ottawa'
+        country:
+          type: string
+          description: Country name
+          example: 'Canada'
+        postal:
+          type: string
+          description: Postal Code
+          example: 'K2G 7Z2'
+        state:
+          type: string
+          description: State
+          example: 'ON.'
+        street:
+          type: string
+          description: Street name
+          example: "Sesame"
+          
     EmployeesList:
         description: list of employees
         type: object
@@ -82,6 +124,15 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Employee'
+    
+    AddressList:
+        description: list of addresses
+        type: object
+        properties:
+          addresses:
+           type: array
+           items:
+            $ref: '#/components/schemas/Address'
 
 security:
   - basicAuth: []
@@ -120,9 +171,7 @@ paths:
                 application/json:
                   schema:
                     $ref: '#/components/schemas/Employee'
-          
-      
-        
+
 
   delete:
       summary: Delete an Employee
@@ -195,3 +244,94 @@ paths:
           $ref: '#/components/responses/UnauthorizedUserError'
         404:
           $ref: '#/components/responses/NotFound'
+          
+ /addresses:
+  get:
+    responses:
+      401:
+         $ref: '#/components/responses/UnauthorizedAdminError'
+      200:
+        description: OK
+        content:
+          application/json:
+           schema:
+             $ref: '#/components/schemas/AddressList'
+
+  post:
+        summary: Create an Adress
+
+        parameters:
+        - in: path
+          name: address
+          required: true
+          description: Address to Create
+          schema:
+            
+            $ref: '#/components/schemas/Address'
+        
+          
+        responses:
+            401:
+               $ref: '#/components/responses/UnauthorizedAdminError'
+            200:
+               description: OK
+               content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Address'
+                    
+  delete:
+      summary: Delete an Address
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: numeric id of the address to delete
+      responses:
+          200:
+           description: OK
+           content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Address'
+          401:
+            $ref: '#/components/responses/UnauthorizedUserError'
+          404:
+            $ref: '#/components/responses/NotFound'
+  put:
+      summary: Update an Address
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: numeric id of the address to delete
+          
+        - in: path
+          name: address
+          description: Address to Create
+          required: true
+          schema:
+            
+            $ref: '#/components/schemas/Address'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+        401:
+          $ref: '#/components/responses/UnauthorizedUserError'
+        404:
+          $ref: '#/components/responses/NotFound'
+
+
+  
+ 
+ 
+    
+
