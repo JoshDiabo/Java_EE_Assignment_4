@@ -4,6 +4,13 @@
  *
  * @author (original) Mike Norman
  * (Modified) @date 2020 03
+ * 
+ * Group Members:
+ * Sam Heaton
+ * Michael Norris
+ * Josh Diabo
+ * Daria Ponomareva
+ *
  */
 package com.algonquincollege.cst8277.ejb;
 

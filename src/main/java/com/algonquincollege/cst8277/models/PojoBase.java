@@ -4,6 +4,11 @@
  * @author Mike Norman
  *
  * @date 2020 02
+ * Group Members:
+ * Sam Heaton
+ * Michael Norris
+ * Josh Diabo
+ * Daria Ponomareva
  */
 package com.algonquincollege.cst8277.models;
 

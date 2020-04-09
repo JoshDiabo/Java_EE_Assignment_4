@@ -13,6 +13,12 @@
  * http://www.eclipse.org/org/documents/edl-v10.php.
  *
  * Original @authors dclarke, mbraeuer
+ * 
+ * Group Members:
+ * Sam Heaton
+ * Michael Norris
+ * Josh Diabo
+ * Daria Ponomareva
  */
 package com.algonquincollege.cst8277.models;
 
