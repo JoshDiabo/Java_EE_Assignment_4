@@ -116,6 +116,99 @@ components:
           description: Street name
           example: "Sesame"
           
+    Project:
+      description: (20W) Assignment 4 - EmployeeSystem project
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          description: ID of  entity
+          type: integer
+        version:
+          description: version (OptLock) of entity
+          type: integer
+        createdDate:
+          description: creation timestamp of entity
+          type: string
+          format: date-time
+        updatedDate:
+          description: last-update timestamp of entity
+          type: string
+          format: date-time
+        description:
+          type: string
+          description: description of project
+          example: 'This project is for a new program.'
+        name:
+          type: string
+          description: Project name
+          example: 'HR - ProjOne'
+    Phone:
+      description: (20W) Assignment 4 - EmployeeSystem phones
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          description: ID of  entity
+          type: integer
+        version:
+          description: version (OptLock) of entity
+          type: integer
+        createdDate:
+          description: creation timestamp of entity
+          type: string
+          format: date-time
+        updatedDate:
+          description: last-update timestamp of entity
+          type: string
+          format: date-time
+        phoneType:
+          type: string
+          description: Type of phone - W, H, M
+          example: 'W'
+        areaCode:
+          type: integer
+          description: Area Code for phone
+          example: 613
+        phoneNumber:
+          type: integer
+          description: Phone number belonging to phone
+          example: 914-9021
+        mapCoords:
+          type: string
+          description: Map coordinates for home
+          example: "44.564811457735° N   133.058411636261° W"
+        department:
+          type: string
+          description: Department
+          example: "HR"
+        provider:
+          type: string
+          description: Phone provider
+          example: "Rogers"
+    
+    PhoneList:
+        description: list of phones
+        type: object
+        properties:
+          phones:
+           type: array
+           items:
+            $ref: '#/components/schemas/Phone'
+
+    
+    ProjectList:
+        description: list of projects
+        type: object
+        properties:
+          projects:
+           type: array
+           items:
+            $ref: '#/components/schemas/Project'
+
+          
     EmployeesList:
         description: list of employees
         type: object
@@ -328,7 +421,242 @@ paths:
           $ref: '#/components/responses/UnauthorizedUserError'
         404:
           $ref: '#/components/responses/NotFound'
+ /addresses/{id}:
+    get:
+      summary: Retrieves an address by its id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: numeric id of the address to retrieve
 
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+        401:
+          $ref: '#/components/responses/UnauthorizedUserError'
+        404:
+          $ref: '#/components/responses/NotFound'
+          
+ /projects:
+  get:
+    responses:
+      401:
+         $ref: '#/components/responses/UnauthorizedAdminError'
+      200:
+        description: OK
+        content:
+          application/json:
+           schema:
+             $ref: '#/components/schemas/ProjectList'
+
+  post:
+        summary: Create a Project
+
+        parameters:
+        - in: path
+          name: projects
+          required: true
+          description: Project to Create
+          schema:
+            
+            $ref: '#/components/schemas/Project'
+        
+          
+        responses:
+            401:
+               $ref: '#/components/responses/UnauthorizedAdminError'
+            200:
+               description: OK
+               content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Project'
+                    
+  delete:
+      summary: Delete a Project
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: numeric id of the project to delete
+      responses:
+          200:
+           description: OK
+           content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Project'
+          401:
+            $ref: '#/components/responses/UnauthorizedUserError'
+          404:
+            $ref: '#/components/responses/NotFound'
+  put:
+      summary: Update a Project
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: numeric id of the project to delete
+          
+        - in: path
+          name: projects
+          description: Project to Create
+          required: true
+          schema:
+            
+            $ref: '#/components/schemas/Project'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        401:
+          $ref: '#/components/responses/UnauthorizedUserError'
+        404:
+          $ref: '#/components/responses/NotFound'
+
+ /projects/{id}:
+    get:
+      summary: Retrieves a project by its id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: numeric id of the project to retrieve
+
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        401:
+          $ref: '#/components/responses/UnauthorizedUserError'
+        404:
+          $ref: '#/components/responses/NotFound'
+          
+ /phones:
+  get:
+    responses:
+      401:
+         $ref: '#/components/responses/UnauthorizedAdminError'
+      200:
+        description: OK
+        content:
+          application/json:
+           schema:
+             $ref: '#/components/schemas/PhoneList'
+
+  post:
+        summary: Create a Phone
+
+        parameters:
+        - in: path
+          name: phones
+          required: true
+          description: Phone to Create
+          schema:
+            
+            $ref: '#/components/schemas/Phone'
+        
+          
+        responses:
+            401:
+               $ref: '#/components/responses/UnauthorizedAdminError'
+            200:
+               description: OK
+               content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Phone'
+                    
+  delete:
+      summary: Delete a Phone
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: numeric id of the phone to delete
+      responses:
+          200:
+           description: OK
+           content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Phone'
+          401:
+            $ref: '#/components/responses/UnauthorizedUserError'
+          404:
+            $ref: '#/components/responses/NotFound'
+  put:
+      summary: Update a Phone
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: numeric id of the phone to delete
+          
+        - in: path
+          name: phones
+          description: Phone to Create
+          required: true
+          schema:
+            
+            $ref: '#/components/schemas/Phone'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Phone'
+        401:
+          $ref: '#/components/responses/UnauthorizedUserError'
+        404:
+          $ref: '#/components/responses/NotFound'
+
+ /phones/{id}:
+    get:
+      summary: Retrieves a phone by its id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: numeric id of the phone to retrieve
+
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Phone'
+        401:
+          $ref: '#/components/responses/UnauthorizedUserError'
+        404:
+          $ref: '#/components/responses/NotFound'
 
   
  

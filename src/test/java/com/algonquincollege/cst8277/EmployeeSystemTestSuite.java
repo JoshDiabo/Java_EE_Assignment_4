@@ -6,6 +6,11 @@
  * @date 2020 03
  *
  * TODO - add to this class for Assignment 4
+ * Group Members:
+ * Sam Heaton
+ * Michael Norris
+ * Josh Diabo
+ * Daria Ponomareva
  */
 package com.algonquincollege.cst8277;
 

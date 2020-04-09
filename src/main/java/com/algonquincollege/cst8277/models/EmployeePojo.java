@@ -33,7 +33,9 @@ import java.util.Set;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -79,6 +81,7 @@ public class EmployeePojo extends PojoBase implements Serializable {
     protected Double salary;
     protected List<PhonePojo> phones = new ArrayList<>();
     protected Set<ProjectPojo> projects = new HashSet<>();
+    protected List<EmployeeTask> tasks = new ArrayList<>();
     protected SecurityUser sUser;
 
     // JPA requires each @Entity class have a default constructor
@@ -133,7 +136,16 @@ public class EmployeePojo extends PojoBase implements Serializable {
     public Set<ProjectPojo> getProjects() {
         return projects;
     }
-    
+    @OneToOne
+    @JoinColumn(name="USER_ID")
+    public SecurityUser getsUser() {
+       return sUser;
+   }
+   
+   public void setsUser(SecurityUser sUser) {
+       this.sUser = sUser;
+   }
+
     /**
      * 
      * @param projects
@@ -179,6 +191,32 @@ public class EmployeePojo extends PojoBase implements Serializable {
     public void setSalary(Double salary) {
         this.salary = salary;
     }
+    /**
+     * 
+     * @return tasks
+     */
+    @ElementCollection
+    @CollectionTable(name = "EMPLOYEE_TASKS", joinColumns = @JoinColumn(name = "OWNING_EMP_ID"))
+    public List<EmployeeTask> getTasks() {
+        return tasks;
+    }
+    
+    /**
+     * 
+     * @param tasks
+     */
+    public void setTasks(List<EmployeeTask> tasks) {
+        this.tasks = tasks;
+    }
+    /**
+     * 
+     * @param t
+     */
+    public void addTask(EmployeeTask t) {
+        getTasks().add(t);
+        
+    }
+    
 
     @JsonManagedReference
     @OneToMany(mappedBy = "owningEmployee", cascade = CascadeType.ALL, orphanRemoval = true)

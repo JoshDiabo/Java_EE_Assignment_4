@@ -4,9 +4,11 @@
  * @author Mike Norman
  * @date 2020 02
  *
- *
+ * Group Members:
+ * Sam Heaton
+ * Michael Norris
+ * Josh Diabo
  * Daria Ponomareva
- * Student ID: 040648913
  *
  *
  *
