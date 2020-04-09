@@ -69,6 +69,8 @@ public class EmployeePojo extends PojoBase implements Serializable {
         "allEmployees";
     public static final String SINGLE_EMPLOYEE_QUERY_NAME =
         "singleEmployees";
+    public static final String RESET_SEQUENCE =
+        "resetSequence";
 
     protected String firstName;
     protected String lastName;

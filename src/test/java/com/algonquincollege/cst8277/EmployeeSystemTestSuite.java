@@ -41,8 +41,10 @@ import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +58,7 @@ import com.algonquincollege.cst8277.models.WorkPhone;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class EmployeeSystemTestSuite {
     private static final Class<?> _thisClaz = MethodHandles.lookup().lookupClass();
     private static final Logger logger = LoggerFactory.getLogger(_thisClaz);
@@ -64,7 +66,7 @@ public class EmployeeSystemTestSuite {
     static final String APPLICATION_CONTEXT_ROOT = "make-progress";
     static final String HTTP_SCHEMA = "http";
     static final String HOST = "localhost";
-    static final int PORT = 8080; //TODO - use your actual Payara port number
+    static final int PORT = 9090; //TODO - use your actual Payara port number
     
     static final String DEFAULT_ADMIN_USER = "admin";
     static final String DEFAULT_ADMIN_USER_PW = "admin";
@@ -101,6 +103,19 @@ public class EmployeeSystemTestSuite {
             .port(PORT)
             .build();
         map = new ObjectMapper().registerModule(new JavaTimeModule());
+        
+        client = ClientBuilder.newClient();
+        WebTarget webTarget = client
+            .register(feature)
+            .target(uri)
+            .path(SOME_RESOURCE)
+            .path("RestartSequence");
+
+        Response response = webTarget
+            .request(APPLICATION_JSON)
+            .get();
+        
+        
 
     }
 
@@ -114,6 +129,7 @@ public class EmployeeSystemTestSuite {
     
     @AfterClass
     public static void oneTimeTearDown() {
+        
         logger.debug("oneTimeTearDown");
         
         
@@ -130,6 +146,7 @@ public class EmployeeSystemTestSuite {
     // to REST'ful endpoints for the EmployeeSystem entities using the JAX-RS
     // ClientBuilder APIs
    
+    @Ignore
     @Test
     public void test00_test_admin() {
         WebTarget webTarget = client
@@ -146,7 +163,7 @@ public class EmployeeSystemTestSuite {
     /**
      * Testing inserting a new employee
      */
-    @Ignore
+    @Test
     public void test01_persist_employee() {
         WebTarget webTarget = client
             .register(feature)
@@ -301,6 +318,8 @@ public class EmployeeSystemTestSuite {
         
         
     }
+   
+    @Ignore
     @Test
     public void test07_read_employees() {
         WebTarget webTarget = client
@@ -325,13 +344,13 @@ public class EmployeeSystemTestSuite {
         assertEquals(200, response.getStatus());
     }
   
-   @Test
+    @Test
     public void test15_update_employee_by_id() {
         WebTarget webTarget = client
             .register(feature)
             .target(uri)
             .path(SOME_RESOURCE)
-            .path("1");
+            .path("3");
       
         
           Response response = webTarget
@@ -340,19 +359,44 @@ public class EmployeeSystemTestSuite {
           
           
             String emp1String = response.readEntity(String.class);
+            System.out.println(emp1String);
             EmployeePojo emp1 = new EmployeePojo();
+            
+            System.out.println(emp1String);
 
             try {
                 emp1 = map.readValue(emp1String, EmployeePojo.class);
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            
 
-            emp1.setFirstName("Testy");
+            emp1.setFirstName("Bono");
+  
 
-
+            String test = "";
+            try {
+                test = map.writeValueAsString(emp1);
+                System.out.println(test);
+            } catch (Exception e) {
+                e.getStackTrace();
+            }
+          
             response = webTarget
                 .request(APPLICATION_JSON)
-                .put(Entity.json(emp1), Response.class);
+                .put(Entity.json(test), Response.class);
+    }
+   
+    @Test
+    public void test19_delete_employee_by_id() {
+        WebTarget webTarget = client
+            .register(feature)
+            .target(uri)
+            .path(SOME_RESOURCE)
+            .path("3");
+        
+        Response response = webTarget
+            .request(APPLICATION_JSON)
+            .delete();
     }
 }
