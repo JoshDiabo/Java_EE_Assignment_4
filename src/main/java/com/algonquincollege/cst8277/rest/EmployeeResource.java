@@ -12,7 +12,6 @@ import static com.algonquincollege.cst8277.utils.MyConstants.EMPLOYEE_RESOURCE_N
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
-import javax.persistence.PersistenceException;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;

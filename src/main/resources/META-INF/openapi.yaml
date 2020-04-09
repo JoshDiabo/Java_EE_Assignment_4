@@ -13,7 +13,7 @@ servers:
       basePath:
         default: 'api/v1'
       port:
-        default: '9090'
+        default: '8080'
 
 components:
   securitySchemes:
@@ -72,10 +72,10 @@ components:
           format: double
           description: Salary of the employee
           example: 100.0
-        # additional for Address/Phone/Project/EmployeeTasks      
+        # additional for Address/Phone/Project/EmployeeTasks
 
     EmployeesList:
-        description: list of employeess
+        description: list of employees
         type: object
         properties:
           employees:
@@ -87,27 +87,27 @@ security:
   - basicAuth: []
   
 paths:
-  /employees:
-    get:
-      responses:
-        401:
-           $ref: '#/components/responses/UnauthorizedAdminError'
-        200:      
-          description: OK
-          content:
-            application/json:
-             schema: 
-               $ref: '#/components/schemas/EmployeesList'
-    post:
+ /employees:
+  get:
+    responses:
+      401:
+         $ref: '#/components/responses/UnauthorizedAdminError'
+      200:
+        description: OK
+        content:
+          application/json:
+           schema:
+             $ref: '#/components/schemas/EmployeesList'
+  post:
         summary: Create an Employee
-        consumes:
-          -application/json
-        parameters: 
-        - in: body
+
+        parameters:
+        - in: path
           name: employee
+          required: true
           description: Employee to Create
-          schema: 
-            type: object,
+          schema:
+            
             $ref: '#/components/schemas/Employee'
         
           
@@ -120,19 +120,11 @@ paths:
                 application/json:
                   schema:
                     $ref: '#/components/schemas/Employee'
-            
-  /employees/{id}:
-    get:
-      summary: Retrieves an employee by its id
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-          description: numeric id of the employee to retrieve
           
-    delete:
+      
+        
+
+  delete:
       summary: Delete an Employee
       parameters:
         - in: path
@@ -141,7 +133,18 @@ paths:
             type: integer
           required: true
           description: numeric id of the employee to delete
-    put:
+      responses:
+          200:
+           description: OK
+           content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Employee'
+          401:
+            $ref: '#/components/responses/UnauthorizedUserError'
+          404:
+            $ref: '#/components/responses/NotFound'
+  put:
       summary: Update an Employee
       parameters:
         - in: path
@@ -151,12 +154,36 @@ paths:
           required: true
           description: numeric id of the employee to delete
           
-        - in: body
+        - in: path
           name: employee
           description: Employee to Create
-          schema: 
-            type: object,
+          required: true
+          schema:
+            
             $ref: '#/components/schemas/Employee'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        401:
+          $ref: '#/components/responses/UnauthorizedUserError'
+        404:
+          $ref: '#/components/responses/NotFound'
+          
+ /employees/{id}:
+    get:
+      summary: Retrieves an employee by its id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: numeric id of the employee to retrieve
+
       responses:
         200:
           description: OK
