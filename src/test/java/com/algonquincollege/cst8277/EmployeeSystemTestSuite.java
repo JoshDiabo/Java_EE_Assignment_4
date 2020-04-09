@@ -18,11 +18,13 @@ import static org.hamcrest.CoreMatchers.not;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 import java.io.ObjectInputStream;
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -54,6 +56,8 @@ import com.algonquincollege.cst8277.models.PhonePojo;
 import com.algonquincollege.cst8277.models.ProjectPojo;
 import com.algonquincollege.cst8277.models.WorkPhone;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
@@ -146,7 +150,7 @@ public class EmployeeSystemTestSuite {
     /**
      * Testing inserting a new employee
      */
-    @Ignore
+    @Test
     public void test01_persist_employee() {
         WebTarget webTarget = client
             .register(feature)
@@ -301,8 +305,10 @@ public class EmployeeSystemTestSuite {
         
         
     }
+  
+
     @Test
-    public void test07_read_employees() {
+    public void test07_read_employees()  {
         WebTarget webTarget = client
             .register(feature)
             .target(uri)
@@ -312,19 +318,23 @@ public class EmployeeSystemTestSuite {
             .request(APPLICATION_JSON)
             .get();
         
-        String e = response.readEntity(String.class);
-        EmployeePojo e1 = new EmployeePojo();
-        try {
-            e1 = new ObjectMapper().readValue(e, EmployeePojo.class);
-        }
-        catch (JsonProcessingException e2) {
-           
-        }
+        System.out.print("hello");
+        String ex = response.readEntity(String.class);
+    
+        EmployeePojo[] e1 = {};
         
-        response = webTarget.request(APPLICATION_JSON).post(Entity.json(e1), Response.class);
+        try {
+            e1 = map.readValue(ex, EmployeePojo[].class);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.print(e1);
+  
         assertEquals(200, response.getStatus());
     }
   
+    
    @Test
     public void test15_update_employee_by_id() {
         WebTarget webTarget = client
