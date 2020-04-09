@@ -118,8 +118,6 @@ public class EmployeeSystemTestSuite {
         Response response = webTarget
             .request(APPLICATION_JSON)
             .get();
-        
-        
     }
 
     @Before
@@ -368,10 +366,6 @@ public class EmployeeSystemTestSuite {
             e.printStackTrace();
         }
        
-
-        System.out.println(a1[0].getCity());
-        
-        response = webTarget.request(APPLICATION_JSON).post(Entity.json(a1), Response.class);
         assertEquals(200, response.getStatus());
     }
   
