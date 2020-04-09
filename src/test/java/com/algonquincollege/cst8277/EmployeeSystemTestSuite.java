@@ -26,6 +26,8 @@ import java.net.URI;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.json.JsonObject;
+import javax.persistence.OptimisticLockException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -33,10 +35,13 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,6 +76,10 @@ public class EmployeeSystemTestSuite {
      * -- Josh
      */
     static URI uri;
+    
+    static Client client;
+    
+    static ObjectMapper map;
 
 
     @BeforeClass
@@ -85,6 +94,8 @@ public class EmployeeSystemTestSuite {
             .host(HOST)
             .port(PORT)
             .build();
+        
+        map = new ObjectMapper().registerModule(new JavaTimeModule());
     }
 
     @AfterClass
@@ -94,19 +105,19 @@ public class EmployeeSystemTestSuite {
         
     }
     
+    @Before
+    public void beforeEach() {
+        client = ClientBuilder.newClient();
+    }
+    
+    
+    
     // TODO - create 40 test-cases that send GET/PUT/POST/DELETE messages
     // to REST'ful endpoints for the EmployeeSystem entities using the JAX-RS
     // ClientBuilder APIs
     
     @Test
     public void test00_test_admin() {
-        Client client = ClientBuilder.newClient();
-        uri = UriBuilder
-            .fromUri(APPLICATION_CONTEXT_ROOT + APPLICATION_API_VERSION)
-            .scheme(HTTP_SCHEMA)
-            .host(HOST)
-            .port(PORT)
-            .build();
         WebTarget webTarget = client
             .register(feature)
             .target(uri)
@@ -120,16 +131,8 @@ public class EmployeeSystemTestSuite {
     /**
      * Testing inserting a new employee
      */
-    @Test
+    @Ignore
     public void test01_persist_employee() {
-        Client client = ClientBuilder.newClient();
-        uri = UriBuilder
-            .fromUri(APPLICATION_CONTEXT_ROOT + APPLICATION_API_VERSION)
-            .scheme(HTTP_SCHEMA)
-            .host(HOST)
-            .port(PORT)
-            .build();
-        
         WebTarget webTarget = client
             .register(feature)
             .target(uri)
@@ -146,5 +149,36 @@ public class EmployeeSystemTestSuite {
        
         
         assertEquals(200, response.getStatus());
+    }
+    
+    @Test
+    public void test15_update_employee_by_id() {
+        WebTarget webTarget = client
+            .register(feature)
+            .target(uri)
+            .path(SOME_RESOURCE)
+            .path("1");
+        
+        Response response = webTarget
+            .request(APPLICATION_JSON)
+            .get();
+        
+        String emp1String = response.readEntity(String.class);
+        EmployeePojo emp1 = new EmployeePojo();
+        
+        try {
+            emp1 = map.readValue(emp1String, EmployeePojo.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        emp1.setFirstName("Testy");
+ 
+        
+        response = webTarget
+            .request(APPLICATION_JSON)
+            .put(Entity.json(emp1), Response.class);
+
+            
     }
 }

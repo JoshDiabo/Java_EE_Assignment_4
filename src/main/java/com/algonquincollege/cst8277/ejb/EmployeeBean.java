@@ -29,8 +29,10 @@ public class EmployeeBean {
         return em.createNamedQuery(ALL_EMPLOYEES_QUERY_NAME, EmployeePojo.class).getResultList();
     }
 
-    public Object getEmployeeById(int id) {
-        return em.createNamedQuery(SINGLE_EMPLOYEE_QUERY_NAME, EmployeePojo.class).setParameter("id", id).getSingleResult();
+    public EmployeePojo getEmployeeById(int id) {
+        EmployeePojo emp = em.createNamedQuery(SINGLE_EMPLOYEE_QUERY_NAME, EmployeePojo.class).setParameter("id", id).getSingleResult();
+        em.detach(emp);
+        return emp;
     }
     
     /**
@@ -39,5 +41,14 @@ public class EmployeeBean {
      */
     public void persistEmployee(EmployeePojo emp) {
         em.persist(emp);
+    }
+    
+    /**
+     * Update an employee
+     * @param emp The Employee with updated fields
+     */
+    public void updateEmployee(EmployeePojo emp) {
+        em.detach(emp);
+        em.merge(emp);
     }
 }
