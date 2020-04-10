@@ -42,6 +42,9 @@ public interface MyConstants {
     
     /** Endpoint associated with Project entities */
     public static final String PROJECT_RESOURCE_NAME = "projects";
+    
+    /** Endpoint associated with Phone entities */
+    public static final String PHONE_RESOURCE_NAME = "phones";
 
     //Security constants
     public static final String USER_ROLE = "USER_ROLE";

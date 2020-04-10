@@ -97,13 +97,10 @@ public class EmployeeSystemTestSuite {
      */
     static final String HOST = "localhost";
 
- 
-
-    
     /**
      * Port hosting the API
      */
-    static final int PORT = 8080; //TODO - use your actual Payara port number
+    static final int PORT = 9090; //TODO - use your actual Payara port number
 
     
     /**
@@ -138,6 +135,9 @@ public class EmployeeSystemTestSuite {
      */
     static final String ADDRESS_RESOURCE =
         "addresses";
+    
+    static final String PHONE_RESOURCE =
+        "phones";
     
 
     /**
@@ -211,6 +211,16 @@ public class EmployeeSystemTestSuite {
             .register(feature)
             .target(uri)
             .path(PROJECT_RESOURCE)
+            .path("RestartSequence");
+
+        response = webTarget
+            .request(APPLICATION_JSON)
+            .get();
+        
+        webTarget = client
+            .register(feature)
+            .target(uri)
+            .path(PHONE_RESOURCE)
             .path("RestartSequence");
 
         response = webTarget
@@ -328,13 +338,12 @@ public class EmployeeSystemTestSuite {
     /**
      * Testing inserts a mobile phone with a new employee
      */
-    @Ignore
     @Test
     public void test04_persist_mobile() {
         WebTarget webTarget = client
             .register(feature)
             .target(uri)
-            .path(EMPLOYEE_RESOURCE);
+            .path(PHONE_RESOURCE);
         
         EmployeePojo e = new EmployeePojo();
         e.setFirstName("Niko");
@@ -342,29 +351,37 @@ public class EmployeeSystemTestSuite {
         
         
         MobilePhone newPhone = new MobilePhone();
+        newPhone.setPhoneType("M");
         newPhone.setAreacode("613");
         newPhone.setPhoneNumber("919-0101");
         newPhone.setProvider("Rogers");
-        
         e.addPhone(newPhone);
+        
+        String newPhoneString = "";
+        try {
+            newPhoneString = map.writeValueAsString(newPhone);
+        } catch (Exception e1) {
+            e1.getStackTrace();
+        }
+        
         
         Response response = webTarget
             .request(APPLICATION_JSON)
-            .post(Entity.json(e), Response.class);
+            .post(Entity.json(newPhoneString), Response.class);
         
         assertEquals(200, response.getStatus());
         
     }
+    
     /**
      * Testing inserts a home phone with a new employee
      */
-    @Ignore
     @Test
     public void test05_persist_home() {
         WebTarget webTarget = client
             .register(feature)
             .target(uri)
-            .path(EMPLOYEE_RESOURCE);
+            .path(PHONE_RESOURCE);
         
         EmployeePojo e = new EmployeePojo();
         e.setFirstName("Rio");
@@ -374,26 +391,34 @@ public class EmployeeSystemTestSuite {
         HomePhone newHomePhone = new HomePhone();
         newHomePhone.setAreacode("647");
         newHomePhone.setPhoneNumber("877-5555");
+        newHomePhone.setPhoneType("H");
         
         e.addPhone(newHomePhone);
         
+        String newPhoneString = "";
+        try {
+            newPhoneString = map.writeValueAsString(newHomePhone);
+        } catch (Exception e1) {
+            e1.getStackTrace();
+        }
+        
         Response response = webTarget
             .request(APPLICATION_JSON)
-            .post(Entity.json(e), Response.class);
+            .post(Entity.json(newPhoneString), Response.class);
         
         assertEquals(200, response.getStatus());
         
     }
+    
     /**
      * Testing inserts a work phone with a new employee
      */
-   @Ignore
     @Test
     public void test06_persist_work() {
         WebTarget webTarget = client
             .register(feature)
             .target(uri)
-            .path(EMPLOYEE_RESOURCE);
+            .path(PHONE_RESOURCE);
         
         EmployeePojo e = new EmployeePojo();
         e.setFirstName("May");
@@ -403,16 +428,22 @@ public class EmployeeSystemTestSuite {
         WorkPhone newWorkPhone = new WorkPhone();
         newWorkPhone.setAreacode("901");
         newWorkPhone.setPhoneNumber("800-2222");
+        newWorkPhone.setPhoneType("W");
         
         e.addPhone(newWorkPhone);
         
+        String newPhoneString = "";
+        try {
+            newPhoneString = map.writeValueAsString(newWorkPhone);
+        } catch (Exception e1) {
+            e1.getStackTrace();
+        }
+        
         Response response = webTarget
             .request(APPLICATION_JSON)
-            .post(Entity.json(e), Response.class);
+            .post(Entity.json(newPhoneString), Response.class);
         
         assertEquals(200, response.getStatus());
-        
-        
     }
   
    /**
@@ -498,68 +529,35 @@ public class EmployeeSystemTestSuite {
        
         assertEquals(200, response.getStatus());
     }
+    
     /**
-     * Looks for an employee with a specified ID
+     * Reading all phones from the api
      */
     @Test
-    public void test11_find_employee_by_id() {
+    public void test10_read_phones() {
         WebTarget webTarget = client
             .register(feature)
             .target(uri)
-            .path(EMPLOYEE_RESOURCE)
-            .path("3");
-        
+            .path(PHONE_RESOURCE);
+
         Response response = webTarget
             .request(APPLICATION_JSON)
             .get();
-         
+
+
+        String p = response.readEntity(String.class);
+
+        PhonePojo[] p1 = {};
+        try {
+            p1 = map.readValue(p, PhonePojo[].class);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
         assertEquals(200, response.getStatus());
     }
-    
-    /**
-     * Finds a project via specified ID
-     */
-    @Test
-    public void test12_find_project_by_id() {
-        WebTarget webTarget = client
-            .register(feature)
-            .target(uri)
-            .path(PROJECT_RESOURCE)
-            .path("1");
-        
-        Response response = webTarget
-            .request(APPLICATION_JSON)
-            .get();
-  
-        
-        assertEquals(200, response.getStatus());
-        
-        
-    }
-    
-    /**
-     * Find addresses by specified ID
-     */
-    @Test
-    public void test13_find_address_by_id() {
-        WebTarget webTarget = client
-            .register(feature)
-            .target(uri)
-            .path(ADDRESS_RESOURCE)
-            .path("3");
-        
-        Response response = webTarget
-            .request(APPLICATION_JSON)
-            .get();
-  
-        
-        assertEquals(200, response.getStatus());
-        
-    }
-    
-    /**
-     * Updates an employee via a specified ID
-     */
+
     @Test
     public void test15_update_employee_by_id() {
         WebTarget webTarget = client
@@ -627,7 +625,7 @@ public class EmployeeSystemTestSuite {
              e.printStackTrace();
          }
 
-         project1.setName("First Updated Project");
+         project1.setName("Firs Updated Project");
 
          String newProject = "";
          try {
@@ -682,6 +680,48 @@ public class EmployeeSystemTestSuite {
          response = webTarget
              .request(APPLICATION_JSON)
              .put(Entity.json(newAddress), Response.class);
+
+         assertEquals(200, response.getStatus());
+    }
+    
+    /**
+     * Updates mobile phone with the specified id
+     */
+    @Test
+    public void test18_update_mobile_phone_by_id() {
+        WebTarget webTarget = client
+            .register(feature)
+            .target(uri)
+            .path(PHONE_RESOURCE)
+            .path("1");
+
+
+         Response response = webTarget
+           .request(APPLICATION_JSON)
+           .get();
+
+         String phone1String = response.readEntity(String.class);
+         PhonePojo phone1 = new MobilePhone();
+
+
+         try {
+             phone1 = map.readValue(phone1String, PhonePojo.class);
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
+
+         phone1.setAreacode("666");
+
+         String newPhone = "";
+         try {
+             newPhone = map.writeValueAsString(phone1);
+         } catch (Exception e) {
+             e.getStackTrace();
+         }
+
+         response = webTarget
+             .request(APPLICATION_JSON)
+             .put(Entity.json(newPhone), Response.class);
 
          assertEquals(200, response.getStatus());
     }
@@ -740,74 +780,145 @@ public class EmployeeSystemTestSuite {
         
         assertEquals(200, response.getStatus());
     }
-
-
+    
     /**
-     * Test the Not Found Error 404. Looks for an Employee that does not exist.
+     * Updates home phone with the specified id
      */
     @Test
-    public void test23_error_code_404(){
+    public void test23_update_home_phone_by_id() {
         WebTarget webTarget = client
             .register(feature)
             .target(uri)
-            .path(EMPLOYEE_RESOURCE)
-            .path("36");
-            
-        
-        Response response = webTarget
-            .request(APPLICATION_JSON)
-            .get();
- 
-        assertEquals(404, response.getStatus());
-        
-        
+            .path(PHONE_RESOURCE)
+            .path("2");
+
+
+         Response response = webTarget
+           .request(APPLICATION_JSON)
+           .get();
+
+         String phone1String = response.readEntity(String.class);
+         PhonePojo phone1 = new HomePhone();
+
+
+         try {
+             phone1 = map.readValue(phone1String, PhonePojo.class);
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
+
+         phone1.setAreacode("777");
+
+         String newPhone = "";
+         try {
+             newPhone = map.writeValueAsString(phone1);
+         } catch (Exception e) {
+             e.getStackTrace();
+         }
+
+         response = webTarget
+             .request(APPLICATION_JSON)
+             .put(Entity.json(newPhone), Response.class);
+
+         assertEquals(200, response.getStatus());
     }
     
     /**
-     * Tests the Unauthorized 401 Error.
+     * Delete HomePhone with specified id
      */
     @Test
-    public void test24_error_code_401() {
-        feature = HttpAuthenticationFeature.basic("not", "allowed");
-        
+    public void test26_delete_home_phone_by_id() {
         WebTarget webTarget = client
             .register(feature)
             .target(uri)
-            .path(EMPLOYEE_RESOURCE)
+            .path(PHONE_RESOURCE)
+            .path("2");
+
+        Response response = webTarget
+            .request(APPLICATION_JSON)
+            .delete();
+
+
+        assertEquals(200, response.getStatus());
+    }
+    
+    /**
+     * Updates home phone with the specified id
+     */
+    @Test
+    public void test27_update_work_phone_by_id() {
+        WebTarget webTarget = client
+            .register(feature)
+            .target(uri)
+            .path(PHONE_RESOURCE)
             .path("3");
-            
-        
-        Response response = webTarget
-            .request(APPLICATION_JSON)
-            .get();
 
-        assertEquals(401, response.getStatus());
+
+         Response response = webTarget
+           .request(APPLICATION_JSON)
+           .get();
+
+         String phone1String = response.readEntity(String.class);
+         PhonePojo phone1 = new WorkPhone();
+
+
+         try {
+             phone1 = map.readValue(phone1String, PhonePojo.class);
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
+
+         phone1.setAreacode("888");
+
+         String newPhone = "";
+         try {
+             newPhone = map.writeValueAsString(phone1);
+         } catch (Exception e) {
+             e.getStackTrace();
+         }
+
+         response = webTarget
+             .request(APPLICATION_JSON)
+             .put(Entity.json(newPhone), Response.class);
+
+         assertEquals(200, response.getStatus());
     }
     
     /**
-     * Tests the Forbidden Error 403.
+     * Deletes MobilePhone with the specified id
      */
     @Test
-    public void test25_error_code_403() {
-        feature = HttpAuthenticationFeature.basic("user1", "user1");
-        
+    public void test28_delete_mobile_phone_by_id() {
         WebTarget webTarget = client
             .register(feature)
             .target(uri)
-            .path(EMPLOYEE_RESOURCE)
+            .path(PHONE_RESOURCE)
             .path("1");
-            
-        
+
         Response response = webTarget
             .request(APPLICATION_JSON)
-            .get();
+            .delete();
 
-        assertEquals(403, response.getStatus());
-      
+
+        assertEquals(200, response.getStatus());
     }
-
-        
-        
-        
     
+    /**
+     * Delete WorkPhone with specified id
+     */
+    @Test
+    public void test29_delete_work_phone_by_id() {
+        WebTarget webTarget = client
+            .register(feature)
+            .target(uri)
+            .path(PHONE_RESOURCE)
+            .path("3");
+
+        Response response = webTarget
+            .request(APPLICATION_JSON)
+            .delete();
+
+
+        assertEquals(200, response.getStatus());
+    }
 }

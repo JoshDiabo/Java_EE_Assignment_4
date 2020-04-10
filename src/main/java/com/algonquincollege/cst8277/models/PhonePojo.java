@@ -32,12 +32,17 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+
+import static com.algonquincollege.cst8277.models.PhonePojo.ALL_PHONES_QUERY_NAME;
+import static com.algonquincollege.cst8277.models.PhonePojo.SINGLE_PHONES_QUERY_NAME;
 
 /**
  * Phone class
@@ -57,13 +62,48 @@ import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 @AttributeOverride(name = "id", column = @Column(name="PHONE_ID"))
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "PHONE_TYPE", length = 1)
+@NamedQueries({
+    @NamedQuery(
+        name = ALL_PHONES_QUERY_NAME,
+        query = "SELECT p FROM Phone p"
+    ),
+    @NamedQuery(
+        name = SINGLE_PHONES_QUERY_NAME,
+        query = "SELECT p FROM Phone p" +
+            " WHERE p.id = :id"
+    )
+})
 public abstract class PhonePojo extends PojoBase implements Serializable {
     /** explicit set serialVersionUID */
     private static final long serialVersionUID = 1L;
+    
+    /**Query name constant*/
+    public static final String ALL_PHONES_QUERY_NAME =
+        "allPhones";
+    
+    /**Query name constant*/
+    public static final String SINGLE_PHONES_QUERY_NAME =
+        "singlePhone";
 
     protected String areacode;
     protected String phoneNumber;
     protected EmployeePojo owningEmployee;
+    protected String phoneType;
+
+    /**
+     * @return the type
+     */
+    @Column(name = "PHONE_TYPE")
+    public String getPhoneType() {
+        return phoneType;
+    }
+
+    /**
+     * @param type the type to set
+     */
+    public void setPhoneType(String phoneType) {
+        this.phoneType = phoneType;
+    }
 
     // JPA requires each @Entity class have a default constructor
     public PhonePojo() {

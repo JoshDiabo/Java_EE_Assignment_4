@@ -4,8 +4,9 @@ import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="Dali", date="2020-04-09T18:41:31.067-0400")
+@Generated(value="Dali", date="2020-04-09T20:15:28.788-0400")
 @StaticMetamodel(HomePhone.class)
 public class HomePhone_ extends PhonePojo_ {
 	public static volatile SingularAttribute<HomePhone, String> directions;
 }
+
