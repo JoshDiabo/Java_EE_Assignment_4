@@ -70,8 +70,13 @@ public class EmployeeResource {
     @RolesAllowed(ADMIN_ROLE)
     @Path("{id}")
     public Response getEmployeeById(@PathParam("id") int id) {
-        return Response.ok(eBean.getEmployeeById(id)).build();
-    }
+       try { return Response.ok(eBean.getEmployeeById(id)).build();
+       
+       }catch(Exception e) {
+           
+       e.printStackTrace();
+        return Response.status(404).build();
+       }}
     
     /**
      * 

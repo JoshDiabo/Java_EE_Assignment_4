@@ -13,3 +13,4 @@ public class AddressPojo_ extends PojoBase_ {
 	public static volatile SingularAttribute<AddressPojo, String> state;
 	public static volatile SingularAttribute<AddressPojo, String> street;
 }
+

@@ -13,3 +13,4 @@ public class EmployeeTask_ {
 	public static volatile SingularAttribute<EmployeeTask, LocalDateTime> taskEndDate;
 	public static volatile SingularAttribute<EmployeeTask, Boolean> done;
 }
+

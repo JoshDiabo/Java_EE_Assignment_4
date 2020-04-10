@@ -75,7 +75,12 @@ public class AddressResource {
     @RolesAllowed(ADMIN_ROLE)
     @Path("{id}")
     public Response getAddressById(@PathParam("id") int id) {
+        try {
         return Response.ok(aBean.getAddressById(id)).build();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(401).build();
+        }
     }
     
     /**

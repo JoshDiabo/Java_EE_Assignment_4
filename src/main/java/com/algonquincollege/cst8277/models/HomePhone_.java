@@ -9,3 +9,4 @@ import javax.persistence.metamodel.StaticMetamodel;
 public class HomePhone_ extends PhonePojo_ {
 	public static volatile SingularAttribute<HomePhone, String> directions;
 }
+
