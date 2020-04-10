@@ -5,7 +5,7 @@
  *
  * @date 2020 03
  *
- * TODO - add to this class for Assignment 4
+ * 
  * Group Members:
  * Sam Heaton
  * Michael Norris
@@ -96,11 +96,15 @@ public class EmployeeSystemTestSuite {
      * The server hosting the API
      */
     static final String HOST = "localhost";
+
+ 
+
     
     /**
      * Port hosting the API
      */
     static final int PORT = 9090; //TODO - use your actual Payara port number
+
     
     /**
      * Defines ADMIN_USER user name
@@ -135,9 +139,11 @@ public class EmployeeSystemTestSuite {
     static final String ADDRESS_RESOURCE =
         "addresses";
     
+
     /**
      * Project resource endpoint
      */
+
     static final String PROJECT_RESOURCE =
         "projects";
 
