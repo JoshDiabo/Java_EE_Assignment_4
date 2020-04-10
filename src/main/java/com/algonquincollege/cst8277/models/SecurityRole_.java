@@ -12,3 +12,4 @@ public class SecurityRole_ {
 	public static volatile SetAttribute<SecurityRole, SecurityUser> users;
 	public static volatile SingularAttribute<SecurityRole, String> roleName;
 }
+

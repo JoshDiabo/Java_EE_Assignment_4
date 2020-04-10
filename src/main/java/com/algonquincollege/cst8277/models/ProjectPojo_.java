@@ -12,3 +12,4 @@ public class ProjectPojo_ extends PojoBase_ {
 	public static volatile SingularAttribute<ProjectPojo, String> description;
 	public static volatile SingularAttribute<ProjectPojo, String> name;
 }
+
