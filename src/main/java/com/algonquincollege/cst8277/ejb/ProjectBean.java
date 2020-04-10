@@ -1,3 +1,14 @@
+/***************************************************************************f******************u************zz*******y**
+ * File: ProjectBean.java
+ * Course materials (20W) CST 8277
+ * 
+ * Group Members:
+ * Sam Heaton
+ * Michael Norris
+ * Josh Diabo
+ * Daria Ponomareva
+ */
+
 package com.algonquincollege.cst8277.ejb;
 
 import static com.algonquincollege.cst8277.models.ProjectPojo.SINGLE_PROJECT_QUERY_NAME;
