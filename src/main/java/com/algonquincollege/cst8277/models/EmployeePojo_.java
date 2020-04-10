@@ -18,3 +18,4 @@ public class EmployeePojo_ extends PojoBase_ {
 	public static volatile SingularAttribute<EmployeePojo, Double> salary;
 	public static volatile ListAttribute<EmployeePojo, EmployeeTask> tasks;
 }
+

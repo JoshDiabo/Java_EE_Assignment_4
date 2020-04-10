@@ -14,3 +14,4 @@ public class SecurityUser_ {
 	public static volatile SingularAttribute<SecurityUser, String> username;
 	public static volatile SingularAttribute<SecurityUser, String> pwHash;
 }
+

@@ -9,3 +9,4 @@ import javax.persistence.metamodel.StaticMetamodel;
 public class WorkPhone_ extends PhonePojo_ {
 	public static volatile SingularAttribute<WorkPhone, String> department;
 }
+

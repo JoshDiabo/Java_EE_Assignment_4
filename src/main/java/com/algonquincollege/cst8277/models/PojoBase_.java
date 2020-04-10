@@ -13,3 +13,4 @@ public class PojoBase_ {
 	public static volatile SingularAttribute<PojoBase, LocalDateTime> createdDate;
 	public static volatile SingularAttribute<PojoBase, LocalDateTime> updatedDate;
 }
+

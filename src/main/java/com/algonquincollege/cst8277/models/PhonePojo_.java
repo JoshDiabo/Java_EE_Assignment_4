@@ -12,3 +12,4 @@ public class PhonePojo_ extends PojoBase_ {
 	public static volatile SingularAttribute<PhonePojo, String> phoneNumber;
 	public static volatile SingularAttribute<PhonePojo, String> phoneType;
 }
+
