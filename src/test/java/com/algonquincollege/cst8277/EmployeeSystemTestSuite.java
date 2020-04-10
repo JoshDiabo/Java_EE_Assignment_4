@@ -103,7 +103,7 @@ public class EmployeeSystemTestSuite {
     /**
      * Port hosting the API
      */
-    static final int PORT = 9090; //TODO - use your actual Payara port number
+    static final int PORT = 8080; //TODO - use your actual Payara port number
 
     
     /**
@@ -498,7 +498,68 @@ public class EmployeeSystemTestSuite {
        
         assertEquals(200, response.getStatus());
     }
-
+    /**
+     * Looks for an employee with a specified ID
+     */
+    @Test
+    public void test11_find_employee_by_id() {
+        WebTarget webTarget = client
+            .register(feature)
+            .target(uri)
+            .path(EMPLOYEE_RESOURCE)
+            .path("3");
+        
+        Response response = webTarget
+            .request(APPLICATION_JSON)
+            .get();
+         
+        assertEquals(200, response.getStatus());
+    }
+    
+    /**
+     * Finds a project via specified ID
+     */
+    @Test
+    public void test12_find_project_by_id() {
+        WebTarget webTarget = client
+            .register(feature)
+            .target(uri)
+            .path(PROJECT_RESOURCE)
+            .path("1");
+        
+        Response response = webTarget
+            .request(APPLICATION_JSON)
+            .get();
+  
+        
+        assertEquals(200, response.getStatus());
+        
+        
+    }
+    
+    /**
+     * Find addresses by specified ID
+     */
+    @Test
+    public void test13_find_address_by_id() {
+        WebTarget webTarget = client
+            .register(feature)
+            .target(uri)
+            .path(ADDRESS_RESOURCE)
+            .path("3");
+        
+        Response response = webTarget
+            .request(APPLICATION_JSON)
+            .get();
+  
+        
+        assertEquals(200, response.getStatus());
+        
+    }
+    
+    /**
+     * Updates an employee via a specified ID
+     */
     @Test
     public void test15_update_employee_by_id() {
         WebTarget webTarget = client
@@ -566,7 +627,7 @@ public class EmployeeSystemTestSuite {
              e.printStackTrace();
          }
 
-         project1.setName("Firs Updated Project");
+         project1.setName("First Updated Project");
 
          String newProject = "";
          try {
@@ -679,4 +740,74 @@ public class EmployeeSystemTestSuite {
         
         assertEquals(200, response.getStatus());
     }
+
+
+    /**
+     * Test the Not Found Error 404. Looks for an Employee that does not exist.
+     */
+    @Test
+    public void test23_error_code_404(){
+        WebTarget webTarget = client
+            .register(feature)
+            .target(uri)
+            .path(EMPLOYEE_RESOURCE)
+            .path("36");
+            
+        
+        Response response = webTarget
+            .request(APPLICATION_JSON)
+            .get();
+ 
+        assertEquals(404, response.getStatus());
+        
+        
+    }
+    
+    /**
+     * Tests the Unauthorized 401 Error.
+     */
+    @Test
+    public void test24_error_code_401() {
+        feature = HttpAuthenticationFeature.basic("not", "allowed");
+        
+        WebTarget webTarget = client
+            .register(feature)
+            .target(uri)
+            .path(EMPLOYEE_RESOURCE)
+            .path("3");
+            
+        
+        Response response = webTarget
+            .request(APPLICATION_JSON)
+            .get();
+
+        assertEquals(401, response.getStatus());
+    }
+    
+    /**
+     * Tests the Forbidden Error 403.
+     */
+    @Test
+    public void test25_error_code_403() {
+        feature = HttpAuthenticationFeature.basic("user1", "user1");
+        
+        WebTarget webTarget = client
+            .register(feature)
+            .target(uri)
+            .path(EMPLOYEE_RESOURCE)
+            .path("1");
+            
+        
+        Response response = webTarget
+            .request(APPLICATION_JSON)
+            .get();
+
+        assertEquals(403, response.getStatus());
+      
+    }
+
+        
+        
+        
+    
 }
